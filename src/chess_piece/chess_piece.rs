@@ -1,5 +1,4 @@
 #[derive(Debug, Clone, Copy)]
-/// Possible piece types in chess.
 pub enum PieceType {
     Pawn,
     Knight,
@@ -10,21 +9,32 @@ pub enum PieceType {
 }
 
 #[derive(Debug, Clone, Copy)]
-/// Possible colors of chess pieces.
 pub enum Color {
     White,
     Black,
 }
 
+pub trait ChessPiece {
+    fn piece_type(&self) -> PieceType;
+    fn color(&self) -> Color;
+}
+
 #[derive(Debug, Clone, Copy)]
-pub struct ChessPiece {
-    pub piece_type: PieceType,
+pub struct Pawn {
     pub color: Color,
 }
 
-impl ChessPiece {
-    pub fn new(piece_type: PieceType, color: Color) -> ChessPiece {
-        ChessPiece { piece_type, color }
+impl ChessPiece for Pawn {
+    fn piece_type(&self) -> PieceType {
+        PieceType::Pawn
     }
 
+    fn color(&self) -> Color {
+        self.color
+    }
+}
+
+pub enum Piece {
+    Empty,
+    Occupied(Box<dyn ChessPiece>),
 }

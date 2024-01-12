@@ -1,4 +1,4 @@
-mod chess_piece;
-mod fen;
-pub use fen::*;
-
+pub mod chess_board;
+pub mod chess_piece;
+pub use chess_board::*;
+pub use chess_piece::*;

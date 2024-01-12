@@ -64,7 +64,7 @@ impl Fen {
     /// Prints out a chess board.
     /// It just uses the boardify function and prints its output
     pub fn print_to_board(&self) {
-        println!("{}",self.boardify())
+        println!("{}", self.boardify())
     }
 
     /// Returns a chess board in form of a String.

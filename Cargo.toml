@@ -11,8 +11,9 @@ name = "fenix"
 crate-type = ["lib"]
 
 [[test]]
-name = "fen_test"
-path = "tests/fen_test.rs"
+name = "fenix_test"
+path = "tests/fenix_test.rs"
+
 
 [dependencies]
 
