@@ -1,7 +1,7 @@
 extern crate fenix;
 
 use fenix::chess_board::fen::*;
-use fenix::chess_board::algebraic_notation::*;
+use fenix::chess_board::notation_parser::*;
 
 #[test]
 fn main() {
@@ -10,7 +10,5 @@ fn main() {
     fen.print_to_board();
 
 
-    println!("{:?}", coord_first);
-    println!("{:?}", coord_second);
 
 }

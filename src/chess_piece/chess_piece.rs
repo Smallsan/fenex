@@ -1,3 +1,5 @@
+use crate::chess_board::coordinates::Coordinates;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PieceType {
     Pawn,
@@ -6,11 +8,6 @@ pub enum PieceType {
     Rook,
     Queen,
     King,
-}
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Coordinates{
-    pub x: i8,
-    pub y: i8,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]

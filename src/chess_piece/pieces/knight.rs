@@ -1,4 +1,5 @@
 use crate::chess_piece::chess_piece::*;
+use crate::chess_board::coordinates::Coordinates;
 impl ChessPiece for Knight {
     fn piece_type(&self) -> PieceType {
         PieceType::Knight

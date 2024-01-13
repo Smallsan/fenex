@@ -1,5 +1,5 @@
 use crate::chess_piece::chess_piece::*;
-
+use crate::chess_board::coordinates::Coordinates;
 
 impl ChessPiece for Bishop {
     fn piece_type(&self) -> PieceType {

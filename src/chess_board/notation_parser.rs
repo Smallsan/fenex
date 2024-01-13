@@ -1,4 +1,6 @@
-use crate::chess_piece::chess_piece::{Color, PieceType, ChessPiece, Coordinates};
+use crate::chess_piece::chess_piece::{Color, PieceType, ChessPiece};
+use crate::chess_board::coordinates::Coordinates;
+use crate::chess_board::notation::Notation;
 
 #[derive(Debug)]
 pub struct ChessMove {
@@ -8,10 +10,6 @@ pub struct ChessMove {
     captured_piece_location: Option<Coordinates>,
 }
 
-pub struct Notation {
-    file: char,
-    rank: char,
-}
 
 impl ChessMove {
     pub fn new(
