@@ -3,6 +3,9 @@ name = "fenix"
 version = "0.1.0"
 edition = "2021"
 authors = ["Small San", "DefinitelyNotSmallSan@gmail.com"]
+readme = "README.md"
+repository = "https://github.com/Smallsan/fenix"
+description = "A rust library for parsing and handling FEN and algebraic chess notations."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
