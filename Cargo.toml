@@ -1,21 +1,21 @@
 [package]
-name = "fenix"
+name = "fenx"
 version = "0.1.0"
 edition = "2021"
 authors = ["Small San", "DefinitelyNotSmallSan@gmail.com"]
 readme = "README.md"
-repository = "https://github.com/Smallsan/fenix"
+repository = "https://github.com/Smallsan/fenx"
 description = "A rust library for parsing and handling FEN and algebraic chess notations."
 license = "MIT OR Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "fenix"
+name = "fenx"
 crate-type = ["lib"]
 
 [[test]]
-name = "fenix_test"
+name = "fenx_test"
 path = "tests/fenix_test.rs"
 
 
