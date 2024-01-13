@@ -15,7 +15,6 @@ impl ChessPiece for Pawn {
 
     fn can_capture(&self, target: &dyn ChessPiece) -> bool {
         if self.color() != target.color() {
-            // Check if the target piece is diagonally in front of the pawn
             let dx = (self.location().x - target.location().x).abs();
             let dy = (self.location().y - target.location().y).abs();
             dx == 1 && dy == 1
