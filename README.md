@@ -4,11 +4,11 @@ Fenix is a Rust library for handling chess game logic. It provides support for p
 
 ## Features
 
-### Fen Module
+## Fen Module
 
 The Fen module provides the `Fen` struct for representing a chess position in Forsyth-Edwards Notation (FEN).
 
-#### `Fen` Struct
+### `Fen` Struct
 
 - **Constructor:** `Fen::new(board: &str) -> Fen`
   - Creates a new `Fen` struct from a given board position string.
