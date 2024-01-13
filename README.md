@@ -55,15 +55,6 @@ The Notation module provides the `Notation` struct for representing a chess move
 - **To Coordinates:** `Notation::to_coordinates(&self) -> Result<Coordinates, &'static str>`
   - Converts the `Notation` struct into a `Coordinates` struct.
 
-#### `ChessMove` Struct
-
-- **Functions:**
-  - `get_piece_from_char(piece_char: char) -> (PieceType, Color)`
-    - Converts a character into a `PieceType` and `Color`.
-
-  - `parse_attack_notation()`
-    - Parses algebraic attack notations.
-
 ## Contribution
 
 Contributions to Fenix are welcome! Please ensure your code is formatted with `cargo fmt` before creating a pull request.
