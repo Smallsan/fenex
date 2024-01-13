@@ -16,7 +16,7 @@ impl ChessPiece for King {
 
     fn can_capture(&self, target: &dyn ChessPiece) -> bool {
         if self.color != target.color() {
-            return true
+            return true;
         }
         false
     }
@@ -28,5 +28,4 @@ impl ChessPiece for King {
     fn can_move_to(&self, coordinates: Coordinates) -> bool {
         true
     }
-
 }

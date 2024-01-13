@@ -1,5 +1,5 @@
-use crate::chess_piece::chess_piece::*;
 use crate::chess_board::coordinates::Coordinates;
+use crate::chess_piece::chess_piece::*;
 
 impl ChessPiece for Pawn {
     fn piece_type(&self) -> PieceType {
@@ -34,5 +34,4 @@ impl ChessPiece for Pawn {
         let dy = (self.location().y - location.y).abs();
         dx == 0 && dy == 1
     }
-
 }

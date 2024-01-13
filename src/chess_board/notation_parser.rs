@@ -1,6 +1,6 @@
-use crate::chess_piece::chess_piece::{Color, PieceType, ChessPiece};
 use crate::chess_board::coordinates::Coordinates;
 use crate::chess_board::notation::Notation;
+use crate::chess_piece::chess_piece::{ChessPiece, Color, PieceType};
 
 #[derive(Debug)]
 pub struct ChessMove {
@@ -9,7 +9,6 @@ pub struct ChessMove {
     captured_piece: Option<(PieceType, Color)>,
     captured_piece_location: Option<Coordinates>,
 }
-
 
 impl ChessMove {
     pub fn new(
@@ -32,9 +31,15 @@ pub fn parse_notation(input: &str) -> Result<ChessMove, &str> {
 
     Ok(ChessMove::new(
         get_piece_from_char(chars[0]),
-        convert_to_coordinates(Notation{file: chars[1], rank: chars[2]}),
+        convert_to_coordinates(Notation {
+            file: chars[1],
+            rank: chars[2],
+        }),
         Some(get_piece_from_char(chars[4])),
-        Some(convert_to_coordinates(Notation{file: chars[5], rank: chars[6]})),
+        Some(convert_to_coordinates(Notation {
+            file: chars[5],
+            rank: chars[6],
+        })),
     ))
 }
 
@@ -65,7 +70,10 @@ pub fn convert_to_coordinates(notation: Notation) -> Coordinates {
         '1'..='8' => (notation.rank as u8 - '1' as u8) as usize,
         _ => panic!("Invalid character: {}", notation.rank),
     };
-    Coordinates { x: x as i8, y: y as i8 }
+    Coordinates {
+        x: x as i8,
+        y: y as i8,
+    }
 }
 
 pub fn convert_to_notation(coordinates: Coordinates) -> Notation {

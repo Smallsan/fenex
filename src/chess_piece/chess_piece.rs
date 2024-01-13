@@ -35,7 +35,8 @@ pub struct Bishop {
 pub struct Rook {
     pub color: Color,
     pub coordinates: Coordinates,
-}#[derive(Debug, Clone, Copy, PartialEq)]
+}
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Queen {
     pub color: Color,
     pub coordinates: Coordinates,
@@ -45,7 +46,6 @@ pub struct King {
     pub color: Color,
     pub coordinates: Coordinates,
 }
-
 
 pub trait ChessPiece {
     fn piece_type(&self) -> PieceType;
@@ -58,7 +58,7 @@ pub trait ChessPiece {
 
 impl Pawn {
     pub fn new(color: Color, coordinates: Coordinates) -> Pawn {
-        Pawn { color, coordinates}
+        Pawn { color, coordinates }
     }
     pub fn can_move_forward(&self) -> bool {
         true
@@ -139,8 +139,3 @@ impl King {
         true
     }
 }
-
-
-
-
-

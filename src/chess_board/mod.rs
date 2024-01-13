@@ -1,4 +1,4 @@
-pub mod notation_parser;
+pub mod coordinates;
 pub mod fen;
 pub mod notation;
-pub mod coordinates;
+pub mod notation_parser;

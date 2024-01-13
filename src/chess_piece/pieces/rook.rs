@@ -1,5 +1,5 @@
-use crate::chess_piece::chess_piece::*;
 use crate::chess_board::coordinates::Coordinates;
+use crate::chess_piece::chess_piece::*;
 
 impl ChessPiece for Rook {
     fn piece_type(&self) -> PieceType {
@@ -16,7 +16,7 @@ impl ChessPiece for Rook {
 
     fn can_capture(&self, target: &dyn ChessPiece) -> bool {
         if self.color != target.color() {
-            return true
+            return true;
         }
         false
     }
@@ -28,5 +28,4 @@ impl ChessPiece for Rook {
     fn can_move_to(&self, coordinates: Coordinates) -> bool {
         true
     }
-
 }

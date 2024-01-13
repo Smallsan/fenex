@@ -1,7 +1,7 @@
 use crate::chess_board::notation::Notation;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Coordinates{
+pub struct Coordinates {
     pub x: i8,
     pub y: i8,
 }

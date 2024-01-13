@@ -51,7 +51,10 @@ impl Notation {
             '1'..='8' => (self.rank as u8 - '1' as u8) as usize,
             _ => return Err("Invalid rank"),
         };
-        Ok(Coordinates { x: x.try_into().unwrap(), y: y.try_into().unwrap() })
+        Ok(Coordinates {
+            x: x.try_into().unwrap(),
+            y: y.try_into().unwrap(),
+        })
     }
 
     pub fn to_string(&self) -> String {
