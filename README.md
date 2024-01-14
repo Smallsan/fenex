@@ -1,6 +1,6 @@
-# Fenx Chess Library (Unfinished)
+# Fenex Chess Library (Unfinished)
 
-Fenx is a Rust library for handling chess game logic. It provides support for parsing Forsyth-Edwards Notation (FEN) strings, handling chess moves in algebraic notation, and more.
+Fenex is a Rust library for handling chess game logic. It provides support for parsing Forsyth-Edwards Notation (FEN) strings, handling chess moves in algebraic notation, and more.
 
 ## Features
 
