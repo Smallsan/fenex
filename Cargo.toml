@@ -1,6 +1,6 @@
 [package]
-name = "fenx"
-version = "0.1.1"
+name = "fenex"
+version = "0.1.0"
 edition = "2021"
 authors = ["Small San", "DefinitelyNotSmallSan@gmail.com"]
 readme = "README.md"
@@ -11,12 +11,12 @@ license = "MIT OR Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "fenx"
+name = "fenex"
 crate-type = ["lib"]
 
 [[test]]
-name = "fenx_test"
-path = "tests/fenix_test.rs"
+name = "fenex_test"
+path = "tests/fenex_test.rs"
 
 
 [dependencies]
