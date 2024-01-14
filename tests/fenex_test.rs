@@ -1,7 +1,7 @@
-extern crate fenix;
+extern crate fenex;
 
-use fenix::chess_board::fen::*;
-use fenix::chess_board::notation_parser::*;
+use fenex::chess_board::fen::*;
+use fenex::chess_board::notation_parser::*;
 
 #[test]
 fn main() {
