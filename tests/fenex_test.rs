@@ -11,5 +11,4 @@ use fenex::piece::Color;
 use fenex::rook::Rook;
 
 #[test]
-fn main() {
-}
+fn main() {}

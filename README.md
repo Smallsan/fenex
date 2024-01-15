@@ -124,6 +124,17 @@ The `Board` module provides the `Board` struct for handling chess boards in both
 ### Boards
 
 ```rust
+    fn create_chess_board() {
+        // Creates a 2D board, With starting pieces.
+        let two_dimensional_board = Board::new_two_dimensional_starting_position();
+
+        // Creates a 1D board, With starting pieces.
+        let one_dimensional_board = Board::new_one_dimensional_starting_position();
+
+        // For checking the boards.
+        dbg!(one_dimensional_board);
+        dbg!(two_dimensional_board);
+    }
 
 ```
 
