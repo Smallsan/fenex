@@ -1,6 +1,6 @@
 [package]
 name = "fenex"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Small San", "DefinitelyNotSmallSan@gmail.com"]
 readme = "README.md"
