@@ -4,39 +4,65 @@ pub mod chess_board;
 pub mod chess_piece;
 
 pub use chess_board::{coordinates, fen_notation, move_parser, notation};
+pub use chess_piece::pieces::{bishop, king, knight, pawn, queen, rook};
 pub use chess_piece::piece;
-pub use chess_piece::pieces::{
-    bishop_piece, king_piece, knight_piece, pawn_piece, queen_piece, rook_piece,
-};
+
+
 
 #[cfg(test)]
 mod test {
-    use crate::{chess_board::board::Board, coordinates::*, notation::*};
+    use crate::{coordinates::Coordinates, notation::Notation, chess_board::board::Board};
 
-    /// The notation and coordinates struct
     #[test]
+    // Creating a Notation and Coordinates object.
     fn create_notation_and_coordinates() {
+
+        // Creates a Notation from chars. ('file' 'rank').
         let notation = Notation::new('e', '4').unwrap();
+
+        // Creates Coordinates from an i8. (x, y).
         let coordinates = Coordinates::new(5, 4);
 
+        // Checks if the converted notation is equal to coordinates.
         assert_eq!(coordinates, notation.to_coordinates().unwrap());
+        // Checks if the converted coordinates is equal to notation.
         assert_eq!(notation, coordinates.to_notation().unwrap());
 
-        let notation_from_char = Notation::from_char('e', '4').unwrap();
+        // Creates a Notation from string. ("e4").
         let notation_from_string = Notation::from_string("e4").unwrap();
-        assert_eq!(notation_from_char, notation_from_string);
 
-        let coordinate_from_new = Coordinates::new(4, 3);
-        let coordinate_from_string = Coordinates::from_string("4,3").unwrap();
-        assert_eq!(coordinate_from_string, coordinate_from_new);
+        // Creates Coordinates from a string of 2 i8 separated by a comma.
+        // ("4.3").
+        let coordinate_from_string = Coordinates::from_string("5,4").unwrap();
+
+        // Checks if the converted notation is equal to coordinates.
+        assert_eq!(
+            coordinate_from_string,
+            notation_from_string.to_coordinates().unwrap()
+        );
+
+        // Checks if the converted coordinates is equal to notation.
+        assert_eq!(
+            notation_from_string,
+            coordinate_from_string.to_notation().unwrap()
+        );
     }
+    
 
-    /// Creating a board object
+    // Creating a board object
     #[test]
     fn create_chess_board() {
+        // Creates a 2D board, With starting pieces.
         let two_dimensional_board = Board::new_two_dimensional_starting_position();
-        dbg!(two_dimensional_board);
+
+        // Creates a 1D board, With starting pieces.
         let one_dimensional_board = Board::new_one_dimensional_starting_position();
+
+
+        // For checking the boards.
         dbg!(one_dimensional_board);
+        dbg!(two_dimensional_board);
     }
+
 }
+

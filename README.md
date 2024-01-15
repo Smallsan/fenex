@@ -55,6 +55,79 @@ The Notation module provides the `Notation` struct for representing a chess move
 - **To Coordinates:** `Notation::to_coordinates(&self) -> Result<Coordinates, &'static str>`
   - Converts the `Notation` struct into a `Coordinates` struct.
 
+## ChessPieceEnum Module
+
+The `ChessPieceEnum` module defines the `ChessPieceEnum` enum, representing different types of chess pieces, and provides methods for updating both color and coordinates.
+
+## BoardType Module
+
+The `BoardType` module defines the `BoardType` enum, representing different types of chess boards (1D and 2D).
+
+## Board Module
+
+The `Board` module provides the `Board` struct for handling chess boards in both 1D and 2D representations.
+
+### `Board` Struct
+
+- **Constructor:** `Board::new_one_dimensional() -> Board` and `Board::new_two_dimensional() -> Board`
+  - Creates a new `1D` or `2D` board with all squares empty.
+
+- **Starting Position:** `Board::new_one_dimensional_starting_position() -> Board` and `Board::new_two_dimensional_starting_position() -> Board`
+  - Creates a new `1D` or `2D` board with pieces in the starting position.
+
+- **Set Piece:** `Board::set_piece(&mut self, coordinates: Coordinates, piece: ChessPieceEnum)`
+  - Sets a piece at the given coordinates.
+
+- **Get Piece:** `Board::get_piece(&self, coordinates: Coordinates) -> Option<&ChessPieceEnum>`
+  - Gets the piece at the given coordinates.
+
+## How To Use
+
+### Coordinates and Notations
+
+```rust
+    fn create_notation_and_coordinates() {
+
+        // Creates a Notation from chars. ('file' 'rank').
+        let notation = Notation::new('e', '4').unwrap();
+
+        // Creates Coordinates from an i8. (x, y).
+        let coordinates = Coordinates::new(5, 4);
+
+        // Checks if the converted notation is equal to coordinates.
+        assert_eq!(coordinates, notation.to_coordinates().unwrap());
+
+        // Checks if the converted coordinates is equal to notation.
+        assert_eq!(notation, coordinates.to_notation().unwrap());
+
+        // Creates a Notation from string. ("e4").
+        let notation_from_string = Notation::from_string("e4").unwrap();
+
+        // Creates Coordinates from a string of 2 i8 separated by a comma.
+        // ("4.3").
+        let coordinate_from_string = Coordinates::from_string("5,4").unwrap();
+
+        // Checks if the converted notation is equal to coordinates.
+        assert_eq!(
+            coordinate_from_string,
+            notation_from_string.to_coordinates().unwrap()
+        );
+
+        // Checks if the converted coordinates is equal to notation.
+        assert_eq!(
+            notation_from_string,
+            coordinate_from_string.to_notation().unwrap()
+        );
+    }
+```
+
+### Boards
+
+```rust
+
+```
+
+
 ## Contribution
 
 Contributions to Fenex are welcome! Please ensure your code is formatted with `cargo fmt` before creating a pull request.

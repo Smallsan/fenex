@@ -77,9 +77,4 @@ impl Notation {
             None
         }
     }
-    /// Creates a `Notation` instance from a file and a rank.
-    /// Returns `None` if the file is not a lowercase ASCII letter or the rank is not a digit.
-    pub fn from_char(file: char, rank: char) -> Option<Notation> {
-        Notation::new(file, rank)
-    }
 }

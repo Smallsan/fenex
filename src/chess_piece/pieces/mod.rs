@@ -1,6 +1,6 @@
-pub mod bishop_piece;
-pub mod king_piece;
-pub mod knight_piece;
-pub mod pawn_piece;
-pub mod queen_piece;
-pub mod rook_piece;
+pub mod bishop;
+pub mod king;
+pub mod knight;
+pub mod pawn;
+pub mod queen;
+pub mod rook;

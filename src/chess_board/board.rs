@@ -1,12 +1,12 @@
 use crate::{
-    bishop_piece::Bishop,
+    bishop::Bishop,
     coordinates::Coordinates,
-    king_piece::King,
-    knight_piece::Knight,
-    pawn_piece::Pawn,
+    king::King,
+    knight::Knight,
+    pawn::Pawn,
     piece::{ChessPiece, Color},
-    queen_piece::Queen,
-    rook_piece::Rook,
+    queen::Queen,
+    rook::Rook,
 };
 
 // The ChessPieceEnum represents the different types of chess pieces.
@@ -76,41 +76,95 @@ impl Board {
             board_type: BoardType::TwoDimensional([[None; 8]; 8]),
         }
     }
-    
+
     /// Creates a new `1D Board` with pieces in the starting position.
     pub fn new_one_dimensional_starting_position() -> Self {
         let mut board = vec![None; 64];
-    
+
         // Set up the pawns.
         for i in 8..16 {
-            board[i] = Some(ChessPieceEnum::Pawn(Pawn { color: Color::White, coordinates: Coordinates::from_index(i) }));
-            board[i + 40] = Some(ChessPieceEnum::Pawn(Pawn { color: Color::Black, coordinates: Coordinates::from_index(i + 40) }));
+            board[i] = Some(ChessPieceEnum::Pawn(Pawn {
+                color: Color::White,
+                coordinates: Coordinates::from_index(i),
+            }));
+            board[i + 40] = Some(ChessPieceEnum::Pawn(Pawn {
+                color: Color::Black,
+                coordinates: Coordinates::from_index(i + 40),
+            }));
         }
-    
+
         // Set up the rooks.
-        board[0] = Some(ChessPieceEnum::Rook(Rook { color: Color::White, coordinates: Coordinates::from_index(0) }));
-        board[7] = Some(ChessPieceEnum::Rook(Rook { color: Color::White, coordinates: Coordinates::from_index(7) }));
-        board[56] = Some(ChessPieceEnum::Rook(Rook { color: Color::Black, coordinates: Coordinates::from_index(56) }));
-        board[63] = Some(ChessPieceEnum::Rook(Rook { color: Color::Black, coordinates: Coordinates::from_index(63) }));
-    
+        board[0] = Some(ChessPieceEnum::Rook(Rook {
+            color: Color::White,
+            coordinates: Coordinates::from_index(0),
+        }));
+        board[7] = Some(ChessPieceEnum::Rook(Rook {
+            color: Color::White,
+            coordinates: Coordinates::from_index(7),
+        }));
+        board[56] = Some(ChessPieceEnum::Rook(Rook {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(56),
+        }));
+        board[63] = Some(ChessPieceEnum::Rook(Rook {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(63),
+        }));
+
         // Set up the knights.
-        board[1] = Some(ChessPieceEnum::Knight(Knight { color: Color::White, coordinates: Coordinates::from_index(1) }));
-        board[6] = Some(ChessPieceEnum::Knight(Knight { color: Color::White, coordinates: Coordinates::from_index(6) }));
-        board[57] = Some(ChessPieceEnum::Knight(Knight { color: Color::Black, coordinates: Coordinates::from_index(57) }));
-        board[62] = Some(ChessPieceEnum::Knight(Knight { color: Color::Black, coordinates: Coordinates::from_index(62) }));
-    
+        board[1] = Some(ChessPieceEnum::Knight(Knight {
+            color: Color::White,
+            coordinates: Coordinates::from_index(1),
+        }));
+        board[6] = Some(ChessPieceEnum::Knight(Knight {
+            color: Color::White,
+            coordinates: Coordinates::from_index(6),
+        }));
+        board[57] = Some(ChessPieceEnum::Knight(Knight {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(57),
+        }));
+        board[62] = Some(ChessPieceEnum::Knight(Knight {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(62),
+        }));
+
         // Set up the bishops.
-        board[2] = Some(ChessPieceEnum::Bishop(Bishop { color: Color::White, coordinates: Coordinates::from_index(2) }));
-        board[5] = Some(ChessPieceEnum::Bishop(Bishop { color: Color::White, coordinates: Coordinates::from_index(5) }));
-        board[58] = Some(ChessPieceEnum::Bishop(Bishop { color: Color::Black, coordinates: Coordinates::from_index(58) }));
-        board[61] = Some(ChessPieceEnum::Bishop(Bishop { color: Color::Black, coordinates: Coordinates::from_index(61) }));
-    
+        board[2] = Some(ChessPieceEnum::Bishop(Bishop {
+            color: Color::White,
+            coordinates: Coordinates::from_index(2),
+        }));
+        board[5] = Some(ChessPieceEnum::Bishop(Bishop {
+            color: Color::White,
+            coordinates: Coordinates::from_index(5),
+        }));
+        board[58] = Some(ChessPieceEnum::Bishop(Bishop {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(58),
+        }));
+        board[61] = Some(ChessPieceEnum::Bishop(Bishop {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(61),
+        }));
+
         // Set up the queen and king.
-        board[3] = Some(ChessPieceEnum::Queen(Queen { color: Color::White, coordinates: Coordinates::from_index(3) }));
-        board[4] = Some(ChessPieceEnum::King(King { color: Color::White, coordinates: Coordinates::from_index(4) }));
-        board[59] = Some(ChessPieceEnum::Queen(Queen { color: Color::Black, coordinates: Coordinates::from_index(59) }));
-        board[60] = Some(ChessPieceEnum::King(King { color: Color::Black, coordinates: Coordinates::from_index(60) }));
-    
+        board[3] = Some(ChessPieceEnum::Queen(Queen {
+            color: Color::White,
+            coordinates: Coordinates::from_index(3),
+        }));
+        board[4] = Some(ChessPieceEnum::King(King {
+            color: Color::White,
+            coordinates: Coordinates::from_index(4),
+        }));
+        board[59] = Some(ChessPieceEnum::Queen(Queen {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(59),
+        }));
+        board[60] = Some(ChessPieceEnum::King(King {
+            color: Color::Black,
+            coordinates: Coordinates::from_index(60),
+        }));
+
         Board {
             board_type: BoardType::OneDimensional(board),
         }
