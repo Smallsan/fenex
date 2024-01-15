@@ -138,7 +138,6 @@ The `Board` module provides the `Board` struct for handling chess boards in both
 
 ```
 
-
 ## Contribution
 
 Contributions to Fenex are welcome! Please ensure your code is formatted with `cargo fmt` before creating a pull request.

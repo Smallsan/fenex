@@ -1,9 +1,10 @@
+#![cfg(not(doctest))]
 #![doc = include_str!("../README.md")]
 
 pub mod chess_board;
 pub mod chess_piece;
 
-pub use chess_board::{coordinates, fen_notation, move_parser, notation};
+pub use chess_board::{coordinates, fen_notation, notation};
 pub use chess_piece::piece;
 pub use chess_piece::pieces::{bishop, king, knight, pawn, queen, rook};
 
@@ -15,10 +16,10 @@ mod test {
     // Creating a Notation and Coordinates object.
     fn create_notation_and_coordinates() {
         // Creates a Notation from chars. ('file' 'rank').
-        let notation = Notation::new('e', '4').unwrap();
+        let notation: Notation = Notation::new('e', '4').unwrap();
 
         // Creates Coordinates from an i8. (x, y).
-        let coordinates = Coordinates::new(5, 4);
+        let coordinates: Coordinates = Coordinates::new(5, 4);
 
         // Checks if the converted notation is equal to coordinates.
         assert_eq!(coordinates, notation.to_coordinates().unwrap());
@@ -26,11 +27,11 @@ mod test {
         assert_eq!(notation, coordinates.to_notation().unwrap());
 
         // Creates a Notation from string. ("e4").
-        let notation_from_string = Notation::from_string("e4").unwrap();
+        let notation_from_string: Notation = Notation::from_string("e4").unwrap();
 
         // Creates Coordinates from a string of 2 i8 separated by a comma.
         // ("4.3").
-        let coordinate_from_string = Coordinates::from_string("5,4").unwrap();
+        let coordinate_from_string: Coordinates = Coordinates::from_string("5,4").unwrap();
 
         // Checks if the converted notation is equal to coordinates.
         assert_eq!(
