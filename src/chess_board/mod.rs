@@ -1,4 +1,5 @@
+pub mod board;
 pub mod coordinates;
-pub mod fen;
+pub mod fen_notation;
+pub mod move_parser;
 pub mod notation;
-pub mod notation_parser;

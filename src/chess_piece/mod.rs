@@ -1,2 +1,2 @@
-pub mod chess_piece;
+pub mod piece;
 pub mod pieces;

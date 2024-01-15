@@ -21,47 +21,46 @@ impl Notation {
             None
         }
     }
-    /// Creates a `Notation` instance from a `Coordinates` instance.
-    /// Returns an error if the coordinates are not valid.
     pub fn from_coordinates(coordinates: Coordinates) -> Result<Notation, &'static str> {
         let file = match coordinates.x {
-            0 => 'a',
-            1 => 'b',
-            2 => 'c',
-            3 => 'd',
-            4 => 'e',
-            5 => 'f',
-            6 => 'g',
-            7 => 'h',
-            _ => return Err("Invalid x coordinate"),
+            1 => 'a',
+            2 => 'b',
+            3 => 'c',
+            4 => 'd',
+            5 => 'e',
+            6 => 'f',
+            7 => 'g',
+            8 => 'h',
+            _ => return Err("Invalid x coordinate for notation conversion"),
         };
         let rank = match coordinates.y {
-            0 => '1',
-            1 => '2',
-            2 => '3',
-            3 => '4',
-            4 => '5',
-            5 => '6',
-            6 => '7',
-            7 => '8',
-            _ => return Err("Invalid y coordinate"),
+            1 => '1',
+            2 => '2',
+            3 => '3',
+            4 => '4',
+            5 => '5',
+            6 => '6',
+            7 => '7',
+            8 => '8',
+            _ => return Err("Invalid y coordinate for notation conversion"),
         };
         Ok(Notation { file, rank })
     }
-    /// Converts the `Notation` instance to a `Coordinates` instance.
-    /// Returns an error if the notation is not valid.
+
     pub fn to_coordinates(&self) -> Result<Coordinates, &'static str> {
         let x = match self.file {
-            'a'..='h' => (self.file as u8 - 'a' as u8) as usize,
-            _ => return Err("Invalid file"),
+            'a'..='h' => (self.file as u8 - 'a' as u8 + 1) as usize,
+            _ => return Err("Invalid file for coordinate conversion"),
         };
         let y = match self.rank {
-            '1'..='8' => (self.rank as u8 - '1' as u8) as usize,
-            _ => return Err("Invalid rank"),
+            '1'..='8' => (self.rank as u8 - '1' as u8 + 1) as usize,
+            _ => return Err("Invalid rank for coordinate conversion"),
         };
         Ok(Coordinates {
-            x: x.try_into().unwrap(),
-            y: y.try_into().unwrap(),
+            x: x.try_into()
+                .expect("Invalid x coordinate for coordinates conversion"),
+            y: y.try_into()
+                .expect("Invalid y coordinate for coordinates conversion"),
         })
     }
     /// Converts the `Notation` instance to a string representation.

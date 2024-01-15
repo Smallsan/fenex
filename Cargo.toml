@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Small San", "DefinitelyNotSmallSan@gmail.com"]
 readme = "README.md"
-repository = "https://github.com/Smallsan/fenx"
+repository = "https://github.com/Smallsan/fenex"
 description = "A rust library for parsing and handling FEN and algebraic chess notations."
 license = "MIT OR Apache-2.0"
 

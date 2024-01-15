@@ -14,60 +14,62 @@ impl Coordinates {
         Coordinates { x, y }
     }
 
-    /// Creates a `Coordinates` instance from a string representation.
-    /// Returns `None` if the string is not a valid representation.
-    pub fn from_string(input: &str) -> Option<Coordinates> {
-        let chars: Vec<char> = input.chars().collect();
-        let x = match chars[0] {
-            'a'..='h' => (chars[0] as u8 - 'a' as u8) as i8,
-            _ => return None,
-        };
-        let y = match chars[1] {
-            '1'..='8' => (chars[1] as u8 - '1' as u8) as i8,
-            _ => return None,
-        };
-        Some(Coordinates { x, y })
+/// Creates a `Coordinates` instance from a string representation.
+/// The string should be in the format "x,y".
+/// Returns `None` if the string is not a valid representation.
+pub fn from_string(input: &str) -> Option<Coordinates> {
+    let parts: Vec<&str> = input.split(',').collect();
+    if parts.len() != 2 {
+        return None;
     }
+    let x = parts[0].trim().parse::<i8>().ok()?;
+    let y = parts[1].trim().parse::<i8>().ok()?;
+    if x < 1 || x > 8 || y < 1 || y > 8 {
+        return None;
+    }
+    Some(Coordinates::new(x, y))
+}
+
     /// Converts the `Coordinates` instance to a string representation.
     pub fn to_string(&self) -> String {
-        format!("{}{}", self.x, self.y)
+        format!("{}{}", self.x + 1, self.y + 1)
     }
     /// Creates a `Coordinates` instance from a `Notation` instance.
     /// Returns an error if the notation is not valid.
     pub fn from_notation(notation: Notation) -> Result<Coordinates, &'static str> {
         let x = match notation.file {
-            'a'..='h' => (notation.file as u8 - 'a' as u8) as i8,
+            'a'..='h' => (notation.file as u8 - 'a' as u8 + 1) as i8,
             _ => return Err("Invalid file"),
         };
         let y = match notation.rank {
-            '1'..='8' => (notation.rank as u8 - '1' as u8) as i8,
+            '1'..='8' => (notation.rank as u8 - '1' as u8 + 1) as i8,
             _ => return Err("Invalid rank"),
         };
-        Ok(Coordinates { x, y })
+        Ok(Coordinates::new(x, y))
     }
     /// Converts the `Coordinates` instance to a `Notation` instance.
     /// Returns an error if the coordinates are not valid.
     pub fn to_notation(&self) -> Result<Notation, &'static str> {
         let file = match self.x {
-            0 => 'a',
-            1 => 'b',
-            2 => 'c',
-            3 => 'd',
-            4 => 'e',
-            5 => 'f',
-            6 => 'g',
-            7 => 'h',
+            1 => 'a',
+            2 => 'b',
+            3 => 'c',
+            4 => 'd',
+            5 => 'e',
+            6 => 'f',
+            7 => 'g',
+            8 => 'h',
             _ => return Err("Invalid x coordinate"),
         };
         let rank = match self.y {
-            0 => '1',
-            1 => '2',
-            2 => '3',
-            3 => '4',
-            4 => '5',
-            5 => '6',
-            6 => '7',
-            7 => '8',
+            1 => '1',
+            2 => '2',
+            3 => '3',
+            4 => '4',
+            5 => '5',
+            6 => '6',
+            7 => '7',
+            8 => '8',
             _ => return Err("Invalid y coordinate"),
         };
         Ok(Notation { file, rank })
@@ -75,15 +77,12 @@ impl Coordinates {
 
     /// Converts the `Coordinates` instance to an index in a 1D array representation of the board.
     pub fn to_index(&self) -> usize {
-        (self.y * 8 + self.x) as usize
+        ((self.y + 1) * 8 + self.x) as usize
     }
 
     /// Creates a `Coordinates` instance from an index in a 1D array representation of the board.
     pub fn from_index(index: usize) -> Coordinates {
-        Coordinates {
-            x: (index % 8) as i8,
-            y: (index / 8) as i8,
-        }
+        Coordinates::new((index % 8 + 1) as i8, (index / 8 + 1) as i8)
     }
 
     /// Checks if the `Coordinates` instance represents a valid position on the board.

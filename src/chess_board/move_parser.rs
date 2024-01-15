@@ -1,6 +1,6 @@
 use crate::chess_board::coordinates::Coordinates;
 use crate::chess_board::notation::Notation;
-use crate::chess_piece::chess_piece::{ChessPiece, Color, PieceType};
+use crate::chess_piece::piece::{ChessPiece, Color, PieceType};
 
 #[derive(Debug)]
 pub struct ChessMove {

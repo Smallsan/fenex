@@ -1,31 +1,33 @@
 use crate::chess_board::coordinates::Coordinates;
-use crate::chess_piece::chess_piece::*;
+use crate::chess_piece::piece::*;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Rook {
+pub struct Knight {
     pub color: Color,
     pub coordinates: Coordinates,
 }
 
-impl Rook {
-    pub fn new(color: Color, coordinates: Coordinates) -> Rook {
-        Rook { color, coordinates }
+impl Knight {
+    pub fn new(color: Color, coordinates: Coordinates) -> Knight {
+        Knight { color, coordinates }
     }
-    pub fn can_move_horizontally(&self) -> bool {
+    pub fn can_jump_over_pieces(&self) -> bool {
+        true
+    }
+    pub fn can_move_in_l_shape(&self) -> bool {
         true
     }
 }
-
-impl ChessPiece for Rook {
+impl ChessPiece for Knight {
     fn piece_type(&self) -> PieceType {
-        PieceType::Rook
+        PieceType::Knight
     }
 
     fn color(&self) -> Color {
         self.color
     }
 
-    fn move_piece(&self, from: Coordinates, to: Coordinates) -> Result<(), &'static str> {
+    fn move_piece(&mut self, to: Coordinates) -> Result<(), &'static str> {
         Ok(())
     }
 

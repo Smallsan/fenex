@@ -1,5 +1,5 @@
 use crate::chess_board::coordinates::Coordinates;
-use crate::chess_piece::chess_piece::*;
+use crate::chess_piece::piece::*;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Pawn {
@@ -38,7 +38,7 @@ impl ChessPiece for Pawn {
         self.color
     }
 
-    fn move_piece(&self, from: Coordinates, to: Coordinates) -> Result<(), &'static str> {
+    fn move_piece(&mut self, to: Coordinates) -> Result<(), &'static str> {
         Ok(())
     }
 
