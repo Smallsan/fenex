@@ -17,6 +17,16 @@ impl Rook {
 }
 
 impl ChessPiece for Rook {
+    /// Changes the color of this piece.
+    fn change_color(&mut self, color: Color) {
+        self.color = color;
+    }
+
+    /// Changes the coordinates of this piece.
+    fn change_coordinates(&mut self, coordinates: Coordinates) {
+        self.coordinates = coordinates;
+    }
+
     fn piece_type(&self) -> PieceType {
         PieceType::Rook
     }
@@ -36,7 +46,7 @@ impl ChessPiece for Rook {
         false
     }
 
-    fn location(&self) -> Coordinates {
+    fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 

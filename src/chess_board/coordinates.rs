@@ -14,21 +14,21 @@ impl Coordinates {
         Coordinates { x, y }
     }
 
-/// Creates a `Coordinates` instance from a string representation.
-/// The string should be in the format "x,y".
-/// Returns `None` if the string is not a valid representation.
-pub fn from_string(input: &str) -> Option<Coordinates> {
-    let parts: Vec<&str> = input.split(',').collect();
-    if parts.len() != 2 {
-        return None;
+    /// Creates a `Coordinates` instance from a string representation.
+    /// The string should be in the format "x,y".
+    /// Returns `None` if the string is not a valid representation.
+    pub fn from_string(input: &str) -> Option<Coordinates> {
+        let parts: Vec<&str> = input.split(',').collect();
+        if parts.len() != 2 {
+            return None;
+        }
+        let x = parts[0].trim().parse::<i8>().ok()?;
+        let y = parts[1].trim().parse::<i8>().ok()?;
+        if x < 1 || x > 8 || y < 1 || y > 8 {
+            return None;
+        }
+        Some(Coordinates::new(x, y))
     }
-    let x = parts[0].trim().parse::<i8>().ok()?;
-    let y = parts[1].trim().parse::<i8>().ok()?;
-    if x < 1 || x > 8 || y < 1 || y > 8 {
-        return None;
-    }
-    Some(Coordinates::new(x, y))
-}
 
     /// Converts the `Coordinates` instance to a string representation.
     pub fn to_string(&self) -> String {
@@ -87,7 +87,7 @@ pub fn from_string(input: &str) -> Option<Coordinates> {
 
     /// Checks if the `Coordinates` instance represents a valid position on the board.
     pub fn is_valid(&self) -> bool {
-        self.x >= 0 && self.x < 8 && self.y >= 0 && self.y < 8
+        self.x >= 1 && self.x <= 8 && self.y >= 1 && self.y <= 8
     }
 
     /// Checks if the `Coordinates` instance is diagonal to another.

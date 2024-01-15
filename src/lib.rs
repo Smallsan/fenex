@@ -11,7 +11,7 @@ pub use chess_piece::pieces::{
 
 #[cfg(test)]
 mod test {
-    use crate::{coordinates::*, notation::*};
+    use crate::{chess_board::board::Board, coordinates::*, notation::*};
 
     /// The notation and coordinates struct
     #[test]
@@ -31,9 +31,12 @@ mod test {
         assert_eq!(coordinate_from_string, coordinate_from_new);
     }
 
-    /// Creating a chess piece object
+    /// Creating a board object
     #[test]
-    fn create_chess_piece() {
-
+    fn create_chess_board() {
+        let two_dimensional_board = Board::new_two_dimensional_starting_position();
+        dbg!(two_dimensional_board);
+        let one_dimensional_board = Board::new_one_dimensional_starting_position();
+        dbg!(one_dimensional_board);
     }
 }

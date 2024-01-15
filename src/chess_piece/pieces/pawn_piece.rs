@@ -30,6 +30,16 @@ impl Pawn {
     }
 }
 impl ChessPiece for Pawn {
+    /// Changes the color of this piece.
+    fn change_color(&mut self, color: Color) {
+        self.color = color;
+    }
+
+    /// Changes the coordinates of this piece.
+    fn change_coordinates(&mut self, coordinates: Coordinates) {
+        self.coordinates = coordinates;
+    }
+
     fn piece_type(&self) -> PieceType {
         PieceType::Pawn
     }
@@ -44,22 +54,22 @@ impl ChessPiece for Pawn {
 
     fn can_capture(&self, target: &dyn ChessPiece) -> bool {
         if self.color() != target.color() {
-            let dx = (self.location().x - target.location().x).abs();
-            let dy = (self.location().y - target.location().y).abs();
+            let dx = (self.coordinates().x - target.coordinates().x).abs();
+            let dy = (self.coordinates().y - target.coordinates().y).abs();
             dx == 1 && dy == 1
         } else {
             false
         }
     }
 
-    fn location(&self) -> Coordinates {
+    fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
-    fn can_move_to(&self, location: Coordinates) -> bool {
+    fn can_move_to(&self, coordinates: Coordinates) -> bool {
         // Check if the target location is directly in front of the pawn
-        let dx = (self.location().x - location.x).abs();
-        let dy = (self.location().y - location.y).abs();
+        let dx = (self.coordinates().x - coordinates.x).abs();
+        let dy = (self.coordinates().y - coordinates.y).abs();
         dx == 0 && dy == 1
     }
 }

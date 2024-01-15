@@ -18,6 +18,16 @@ impl Bishop {
     }
 }
 impl ChessPiece for Bishop {
+    /// Changes the color of this piece.
+    fn change_color(&mut self, color: Color) {
+        self.color = color;
+    }
+
+    /// Changes the coordinates of this piece.
+    fn change_coordinates(&mut self, coordinates: Coordinates) {
+        self.coordinates = coordinates;
+    }
+
     /// Returns the type of this piece.
     fn piece_type(&self) -> PieceType {
         PieceType::Bishop
@@ -48,7 +58,7 @@ impl ChessPiece for Bishop {
     }
 
     /// Returns the current location of this piece.
-    fn location(&self) -> Coordinates {
+    fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 

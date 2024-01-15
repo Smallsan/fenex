@@ -41,6 +41,16 @@ impl King {
 }
 
 impl ChessPiece for King {
+    /// Changes the color of this piece.
+    fn change_color(&mut self, color: Color) {
+        self.color = color;
+    }
+
+    /// Changes the coordinates of this piece.
+    fn change_coordinates(&mut self, coordinates: Coordinates) {
+        self.coordinates = coordinates;
+    }
+
     /// Returns the type of this piece (King).
     fn piece_type(&self) -> PieceType {
         PieceType::King
@@ -71,7 +81,7 @@ impl ChessPiece for King {
         false
     }
 
-    fn location(&self) -> Coordinates {
+    fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
