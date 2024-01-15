@@ -57,4 +57,4 @@ The Notation module provides the `Notation` struct for representing a chess move
 
 ## Contribution
 
-Contributions to Fenix are welcome! Please ensure your code is formatted with `cargo fmt` before creating a pull request.
+Contributions to Fenex are welcome! Please ensure your code is formatted with `cargo fmt` before creating a pull request.
