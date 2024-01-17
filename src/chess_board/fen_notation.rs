@@ -12,22 +12,6 @@ pub struct Fen {
 }
 
 impl Fen {
-    /// Creates a new `Fen` instance with the given board position.
-    ///
-    /// # Arguments
-    ///
-    /// * `board` - The FEN string representing the board position.
-    pub fn new(board: &str) -> Fen {
-        Fen {
-            board: String::from(board),
-            turn: None,
-            castling: None,
-            en_passant: None,
-            halfmove_clock: None,
-            fullmove_number: None,
-        }
-    }
-
     /// Parses a FEN string and returns a `Fen` instance representing the position.
     ///
     /// # Arguments
@@ -37,14 +21,21 @@ impl Fen {
     /// # Returns
     ///
     /// * `Result<Fen, &'static str>` - A `Result` containing the parsed `Fen` instance or an error message.
-    pub fn parse_fen(fen_str: &str) -> Result<Fen, &'static str> {
+    pub fn new(fen_str: &str) -> Result<Fen, &'static str> {
         let parts: Vec<&str> = fen_str.trim().split_whitespace().collect();
 
         if parts.len() < 2 {
             return Err("Invalid FEN string");
         }
 
-        let mut fen = Fen::new(parts[0]);
+        let mut fen = Fen {
+            board: String::from(parts[0]),
+            turn: None,
+            castling: None,
+            en_passant: None,
+            halfmove_clock: None,
+            fullmove_number: None,
+        };
 
         for (i, &part) in parts.iter().skip(1).enumerate() {
             match i {
@@ -59,7 +50,6 @@ impl Fen {
 
         Ok(fen)
     }
-
     /// Prints the debug information of the `Fen` instance.
     pub fn debug(&self) {
         println!(
@@ -74,7 +64,7 @@ impl Fen {
 
     /// Prints the board representation of the `Fen` instance.
     pub fn print_to_board(&self) {
-        println!("{}", self.boardify())
+        println!("{}", self.to_string())
     }
 
     /// Converts the board position to a string representation.
@@ -82,7 +72,7 @@ impl Fen {
     /// # Returns
     ///
     /// * `String` - The string representation of the board position.
-    pub fn boardify(&self) -> String {
+    pub fn to_string(&self) -> String {
         let mut result = String::new();
 
         let rows: Vec<&str> = self.board.split('/').collect();

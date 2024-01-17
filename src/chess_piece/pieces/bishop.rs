@@ -66,6 +66,6 @@ impl ChessPiece for Bishop {
     ///
     /// A bishop can move to a location if it is a diagonal move.
     fn can_move_to(&self, to: Coordinates) -> bool {
-        (self.coordinates.x - to.x).abs() == (self.coordinates.y - to.y).abs()
+        self.coordinates.is_diagonal(to)
     }
 }

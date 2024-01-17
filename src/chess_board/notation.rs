@@ -21,6 +21,7 @@ impl Notation {
             None
         }
     }
+    /// Creates a `Notation` instance from a `Coordinates` instance.
     pub fn from_coordinates(coordinates: Coordinates) -> Result<Notation, &'static str> {
         let file = match coordinates.x {
             1 => 'a',
@@ -47,6 +48,7 @@ impl Notation {
         Ok(Notation { file, rank })
     }
 
+    /// Converts the `Notation` instance to a `Coordinates` instance.
     pub fn to_coordinates(&self) -> Result<Coordinates, &'static str> {
         let x = match self.file {
             'a'..='h' => (self.file as u8 - 'a' as u8 + 1) as usize,

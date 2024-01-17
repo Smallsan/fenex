@@ -108,4 +108,5 @@ impl Coordinates {
         let dy = (self.y - other.y).abs();
         dx <= 1 && dy <= 1
     }
+
 }

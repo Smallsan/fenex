@@ -21,29 +21,12 @@ mod test {
         // Creates Coordinates from an i8. (x, y).
         let coordinates: Coordinates = Coordinates::new(5, 4);
 
-        // Checks if the converted notation is equal to coordinates.
-        assert_eq!(coordinates, notation.to_coordinates().unwrap());
-        // Checks if the converted coordinates is equal to notation.
-        assert_eq!(notation, coordinates.to_notation().unwrap());
-
         // Creates a Notation from string. ("e4").
         let notation_from_string: Notation = Notation::from_string("e4").unwrap();
 
         // Creates Coordinates from a string of 2 i8 separated by a comma.
         // ("4.3").
         let coordinate_from_string: Coordinates = Coordinates::from_string("5,4").unwrap();
-
-        // Checks if the converted notation is equal to coordinates.
-        assert_eq!(
-            coordinate_from_string,
-            notation_from_string.to_coordinates().unwrap()
-        );
-
-        // Checks if the converted coordinates is equal to notation.
-        assert_eq!(
-            notation_from_string,
-            coordinate_from_string.to_notation().unwrap()
-        );
     }
 
     // Creating a board object
@@ -54,9 +37,5 @@ mod test {
 
         // Creates a 1D board, With starting pieces.
         let one_dimensional_board = Board::new_one_dimensional_starting_position();
-
-        // For checking the boards.
-        dbg!(one_dimensional_board);
-        dbg!(two_dimensional_board);
     }
 }

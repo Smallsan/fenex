@@ -50,17 +50,31 @@ impl ChessPieceEnum {
             }
         }
     }
-}
 
+    /// Get a mutable reference to the underlying chess piece.
+    pub fn get_piece_as_mut(&mut self) -> &mut dyn ChessPiece {
+        match self {
+            ChessPieceEnum::Pawn(pawn) => pawn,
+            ChessPieceEnum::Knight(knight) => knight,
+            ChessPieceEnum::Bishop(bishop) => bishop,
+            ChessPieceEnum::Rook(rook) => rook,
+            ChessPieceEnum::Queen(queen) => queen,
+            ChessPieceEnum::King(king) => king,
+        }
+    }
+}
+/// The BoardType represents the different types of chess boards.
 #[derive(Debug, PartialEq)]
 pub enum BoardType {
     OneDimensional(Vec<Option<ChessPieceEnum>>),
     TwoDimensional([[Option<ChessPieceEnum>; 8]; 8]),
 }
 
+/// The Board represents a chess board.
 #[derive(Debug, PartialEq)]
 pub struct Board {
-    board_type: BoardType,
+    pub board_type: BoardType,
+    pub color_to_move: Color,
 }
 
 impl Board {
@@ -68,12 +82,14 @@ impl Board {
     pub fn new_one_dimensional() -> Self {
         Board {
             board_type: BoardType::OneDimensional(vec![None; 64]),
+            color_to_move: Color::White,
         }
     }
     /// Creates a new `2D Board` with all squares empty.
     pub fn new_two_dimensional() -> Self {
         Board {
             board_type: BoardType::TwoDimensional([[None; 8]; 8]),
+            color_to_move: Color::White,
         }
     }
 
@@ -167,6 +183,7 @@ impl Board {
 
         Board {
             board_type: BoardType::OneDimensional(board),
+            color_to_move: Color::White,
         }
     }
 
@@ -236,4 +253,5 @@ impl Board {
             }
         }
     }
+
 }
