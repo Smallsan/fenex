@@ -1,4 +1,4 @@
-# Fenex Chess Library (Unfinished)
+# Fenex Chess Library
 
 Fenex is a Rust library for handling chess game logic. It provides support for parsing Forsyth-Edwards Notation (FEN) strings, handling chess moves in algebraic notation, and more.
 
@@ -80,6 +80,12 @@ The `Board` module provides the `Board` struct for handling chess boards in both
 
 - **Get Piece:** `Board::get_piece(&self, coordinates: Coordinates) -> Option<&ChessPieceEnum>`
   - Gets the piece at the given coordinates.
+
+## How To Install
+
+Just run the ```cargo add fenex```in your project directory.
+
+Or add ```fenex = "0.1.2"``` in your Cargo.toml, Under dependencies.
 
 ## How To Use
 
