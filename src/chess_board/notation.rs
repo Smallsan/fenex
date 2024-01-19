@@ -13,14 +13,22 @@ pub struct Notation {
 
 impl Notation {
     /// Creates a new `Notation` instance.
-    /// Returns `None` if the file is not a lowercase ASCII letter or the rank is not a digit.
-    pub fn new(file: char, rank: char) -> Option<Notation> {
-        if file.is_ascii_lowercase() && rank.is_digit(10) {
-            Some(Notation { file, rank })
-        } else {
-            None
+    pub fn new(file: char, rank: char) -> Result<Notation, &'static str> {
+        if !file.is_ascii_lowercase() {
+            return Err("File should be a lowercase ASCII letter");
         }
+        if !rank.is_digit(10) {
+            return Err("Rank should be a digit");
+        }
+        Ok(Notation { file, rank })
     }
+
+    /// Creates a `Notation` instance from a string representation of coordinates.
+    pub fn from_coordinates_string(input: &str) -> Result<Notation, &'static str> {
+        let coordinates = Coordinates::from_string(input)?;
+        Notation::from_coordinates(coordinates)
+    }
+
     /// Creates a `Notation` instance from a `Coordinates` instance.
     pub fn from_coordinates(coordinates: Coordinates) -> Result<Notation, &'static str> {
         let file = match coordinates.x {
@@ -65,18 +73,13 @@ impl Notation {
                 .expect("Invalid y coordinate for coordinates conversion"),
         })
     }
+
     /// Converts the `Notation` instance to a string representation.
-    pub fn to_string(&self) -> String {
-        format!("{}{}", self.file, self.rank)
-    }
-    /// Creates a `Notation` instance from a string representation.
-    /// Returns `None` if the string is not a valid representation.
-    pub fn from_string(input: &str) -> Option<Notation> {
+    pub fn from_string(input: &str) -> Result<Notation, &'static str> {
         let chars: Vec<char> = input.chars().collect();
-        if chars.len() == 2 {
-            Notation::new(chars[0], chars[1])
-        } else {
-            None
+        if chars.len() != 2 {
+            return Err("Input should be exactly two characters");
         }
+        Notation::new(chars[0], chars[1]).map_err(|_| "Invalid notation")
     }
 }

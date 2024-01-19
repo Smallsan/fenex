@@ -38,4 +38,27 @@ mod test {
         // Creates a 1D board, With starting pieces.
         let one_dimensional_board = Board::new_one_dimensional_starting_position();
     }
+
+    #[test]
+    fn move_piece() {
+        // Creates a 2D board, With starting pieces.
+        let mut two_dimensional_board = Board::new_two_dimensional_starting_position();
+
+        // Creates a 1D board, With starting pieces.
+        let mut one_dimensional_board = Board::new_one_dimensional_starting_position();
+
+        let from = Coordinates::from_notation_string("e2").unwrap();
+        println!("From coordinates: {:?}", from);
+
+        let to = Coordinates::from_notation_string("e4").unwrap();
+        println!("From coordinates: {:?}", to);
+
+        one_dimensional_board.print_board_with_labels();
+
+        let res = one_dimensional_board.move_piece_with_coordinates(from, to);
+
+        dbg!(res);
+
+        one_dimensional_board.print_board_with_labels();
+    }
 }

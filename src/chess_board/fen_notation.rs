@@ -63,7 +63,7 @@ impl Fen {
     }
 
     /// Prints the board representation of the `Fen` instance.
-    pub fn print_to_board(&self) {
+    pub fn display(&self) {
         println!("{}", self.to_string())
     }
 

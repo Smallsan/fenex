@@ -17,23 +17,36 @@ impl Coordinates {
     /// Creates a `Coordinates` instance from a string representation.
     /// The string should be in the format "x,y".
     /// Returns `None` if the string is not a valid representation.
-    pub fn from_string(input: &str) -> Option<Coordinates> {
+    pub fn from_string(input: &str) -> Result<Coordinates, &'static str> {
         let parts: Vec<&str> = input.split(',').collect();
         if parts.len() != 2 {
-            return None;
+            return Err("Input should be in the format 'x,y'");
         }
-        let x = parts[0].trim().parse::<i8>().ok()?;
-        let y = parts[1].trim().parse::<i8>().ok()?;
+        let x = parts[0]
+            .trim()
+            .parse::<i8>()
+            .map_err(|_| "Invalid x coordinate")?;
+        let y = parts[1]
+            .trim()
+            .parse::<i8>()
+            .map_err(|_| "Invalid y coordinate")?;
         if x < 1 || x > 8 || y < 1 || y > 8 {
-            return None;
+            return Err("Coordinates should be between 1 and 8");
         }
-        Some(Coordinates::new(x, y))
+        Ok(Coordinates::new(x, y))
+    }
+
+    /// Creates a `Coordinates` instance from a string representation of notations.
+    pub fn from_notation_string(input: &str) -> Result<Coordinates, &'static str> {
+        let notation = Notation::from_string(input)?;
+        Coordinates::from_notation(notation)
     }
 
     /// Converts the `Coordinates` instance to a string representation.
     pub fn to_string(&self) -> String {
         format!("{}{}", self.x + 1, self.y + 1)
     }
+
     /// Creates a `Coordinates` instance from a `Notation` instance.
     /// Returns an error if the notation is not valid.
     pub fn from_notation(notation: Notation) -> Result<Coordinates, &'static str> {
@@ -77,7 +90,9 @@ impl Coordinates {
 
     /// Converts the `Coordinates` instance to an index in a 1D array representation of the board.
     pub fn to_index(&self) -> usize {
-        ((self.y + 1) * 8 + self.x) as usize
+        let x = (self.x - 1) as usize;
+        let y = (self.y - 1) as usize;
+        y * 8 + x
     }
 
     /// Creates a `Coordinates` instance from an index in a 1D array representation of the board.
@@ -108,5 +123,4 @@ impl Coordinates {
         let dy = (self.y - other.y).abs();
         dx <= 1 && dy <= 1
     }
-
 }

@@ -1,68 +1,8 @@
 use crate::{
-    bishop::Bishop,
-    coordinates::Coordinates,
-    king::King,
-    knight::Knight,
-    pawn::Pawn,
-    piece::{ChessPiece, Color},
-    queen::Queen,
-    rook::Rook,
+    bishop::Bishop, chess_piece::piece_enum::ChessPieceEnum, coordinates::Coordinates, king::King,
+    knight::Knight, notation::Notation, pawn::Pawn, piece::Color, queen::Queen, rook::Rook,
 };
 
-// The ChessPieceEnum represents the different types of chess pieces.
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum ChessPieceEnum {
-    Pawn(Pawn),
-    Knight(Knight),
-    Bishop(Bishop),
-    Rook(Rook),
-    Queen(Queen),
-    King(King),
-}
-
-impl ChessPieceEnum {
-    /// Update both color and coordinates of the chess piece.
-    pub fn change_color_and_coordinates(&mut self, color: Color, coordinates: Coordinates) {
-        match self {
-            ChessPieceEnum::Pawn(pawn) => {
-                pawn.change_coordinates(coordinates);
-                pawn.change_color(color);
-            }
-            ChessPieceEnum::Knight(king) => {
-                king.change_coordinates(coordinates);
-                king.change_color(color);
-            }
-            ChessPieceEnum::Bishop(bishop) => {
-                bishop.change_coordinates(coordinates);
-                bishop.change_color(color);
-            }
-            ChessPieceEnum::Rook(rook) => {
-                rook.change_coordinates(coordinates);
-                rook.change_color(color);
-            }
-            ChessPieceEnum::Queen(queen) => {
-                queen.change_coordinates(coordinates);
-                queen.change_color(color);
-            }
-            ChessPieceEnum::King(king) => {
-                king.change_coordinates(coordinates);
-                king.change_color(color);
-            }
-        }
-    }
-
-    /// Get a mutable reference to the underlying chess piece.
-    pub fn get_piece_as_mut(&mut self) -> &mut dyn ChessPiece {
-        match self {
-            ChessPieceEnum::Pawn(pawn) => pawn,
-            ChessPieceEnum::Knight(knight) => knight,
-            ChessPieceEnum::Bishop(bishop) => bishop,
-            ChessPieceEnum::Rook(rook) => rook,
-            ChessPieceEnum::Queen(queen) => queen,
-            ChessPieceEnum::King(king) => king,
-        }
-    }
-}
 /// The BoardType represents the different types of chess boards.
 #[derive(Debug, PartialEq)]
 pub enum BoardType {
@@ -254,4 +194,153 @@ impl Board {
         }
     }
 
+    /// Moves a piece from one set of coordinates to another.
+    pub fn move_piece_with_coordinates(
+        &mut self,
+        from: Coordinates,
+        to: Coordinates,
+    ) -> Result<(), &'static str> {
+        // Get the piece at the 'from' coordinates.
+        let mut piece = match self.get_piece(from) {
+            Some(piece) => piece.clone(),
+            None => return Err("No piece at the source coordinates"),
+        };
+
+        // Remove the piece from the 'from' coordinates.
+        self.remove_piece(from);
+
+        // Update the piece's coordinates.
+        piece.set_coordinates(to);
+
+        // Place the piece at the 'to' coordinates.
+        self.set_piece(to, piece);
+
+        Ok(())
+    }
+
+    /// Moves a piece from one set of Notations to another.
+    pub fn move_piece_with_notation(
+        &mut self,
+        from: Notation,
+        to: Notation,
+    ) -> Result<(), &'static str> {
+        let from_coordinates = from.to_coordinates().unwrap();
+        let to_coordinates = to.to_coordinates().unwrap();
+        self.move_piece_with_coordinates(from_coordinates, to_coordinates)
+    }
+
+    /// Returns the color to move.
+    pub fn get_color_to_move(&self) -> Color {
+        self.color_to_move
+    }
+
+    /// Changes the color to move.
+    pub fn change_color_to_move(&mut self) {
+        self.color_to_move = match self.color_to_move {
+            Color::White => Color::Black,
+            Color::Black => Color::White,
+        }
+    }
+
+    /// Returns the board type.
+    pub fn get_board_type(&self) -> &BoardType {
+        &self.board_type
+    }
+
+    /// Print the board.
+    pub fn print_board(&self) {
+        match &self.board_type {
+            BoardType::OneDimensional(board) => {
+                for (i, piece) in board.iter().enumerate() {
+                    if let Some(piece) = piece {
+                        print!("[{}]", piece.to_string());
+                    } else {
+                        print!("[ ]");
+                    }
+                    if (i + 1) % 8 == 0 {
+                        println!();
+                    }
+                }
+            }
+            BoardType::TwoDimensional(board) => {
+                for row in board {
+                    for piece in row {
+                        if let Some(piece) = piece {
+                            print!("[{}]", piece.to_string());
+                        } else {
+                            print!("[ ]");
+                        }
+                    }
+                    println!();
+                }
+            }
+        }
+    }
+
+    /// Moves a piece from the source coordinates to the destination coordinates.
+    pub fn move_piece(&mut self, source: Coordinates, destination: Coordinates) {
+        // Remove the piece from the source coordinates.
+        let piece = self.remove_piece(source);
+
+        // Place the piece at the destination coordinates.
+        if let Some(mut piece) = piece {
+            // Update the piece's coordinates to the destination.
+            piece.set_coordinates(destination);
+            self.set_piece(destination, piece);
+        }
+    }
+
+    /// Removes a piece from the given coordinates and returns it.
+    pub fn remove_piece(&mut self, coordinates: Coordinates) -> Option<ChessPieceEnum> {
+        match &mut self.board_type {
+            BoardType::OneDimensional(board) => {
+                let index = coordinates.to_index();
+                board[index].take()
+            }
+            BoardType::TwoDimensional(board) => {
+                let x = (coordinates.x - 1) as usize;
+                let y = (coordinates.y - 1) as usize;
+                board[y][x].take()
+            }
+        }
+    }
+
+    /// Print the board with notations.
+    pub fn print_board_with_labels(&self) {
+        // Print file labels
+        println!("   a  b  c  d  e  f  g  h");
+
+        match &self.board_type {
+            BoardType::OneDimensional(board) => {
+                for i in (0..8).rev() {
+                    // Print rank label
+                    print!("{} ", i + 1);
+
+                    for j in 0..8 {
+                        if let Some(piece) = board[i * 8 + j] {
+                            print!("[{}]", piece.to_string());
+                        } else {
+                            print!("[ ]");
+                        }
+                    }
+                    println!();
+                }
+            }
+            BoardType::TwoDimensional(board) => {
+                for (i, row) in board.iter().enumerate().rev() {
+                    // Print rank label
+                    print!("{} ", i + 1);
+
+                    for piece in row {
+                        if let Some(piece) = piece {
+                            print!("[{}]", piece.to_string());
+                        } else {
+                            print!("[ ]");
+                        }
+                    }
+                    println!();
+                }
+            }
+        }
+    }
 }
