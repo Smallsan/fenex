@@ -4,7 +4,7 @@ use crate::{
     king::King,
     knight::Knight,
     pawn::Pawn,
-    piece::{ChessPiece, Color},
+    piece::{ChessPiece, Color, PieceType},
     queen::Queen,
     rook::Rook,
 };
@@ -21,6 +21,18 @@ pub enum ChessPieceEnum {
 }
 
 impl ChessPieceEnum {
+    /// Returns chess piece type.
+    pub fn get_piece_type(&self) -> PieceType {
+        match self {
+            ChessPieceEnum::Pawn(_) => PieceType::Pawn,
+            ChessPieceEnum::Knight(_) => PieceType::Knight,
+            ChessPieceEnum::Bishop(_) => PieceType::Bishop,
+            ChessPieceEnum::Rook(_) => PieceType::Rook,
+            ChessPieceEnum::Queen(_) => PieceType::Queen,
+            ChessPieceEnum::King(_) => PieceType::King,
+        }
+    }
+
     /// Update both color and coordinates of the chess piece.
     pub fn change_color_and_coordinates(&mut self, color: Color, coordinates: Coordinates) {
         match self {
@@ -63,6 +75,7 @@ impl ChessPieceEnum {
         }
     }
 
+    /// Sets the coordinates of the chess piece.
     pub fn set_coordinates(&mut self, coordinates: Coordinates) {
         match self {
             ChessPieceEnum::Pawn(pawn) => pawn.coordinates = coordinates,

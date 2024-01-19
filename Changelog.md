@@ -6,7 +6,7 @@
 
 ## Fenex v0.1.1 (1/15/2024)
 
-### Changes:
+### Changes
 
 - Switched Coordinates to 1-Index, Previously 0-Indexed.
 

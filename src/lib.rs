@@ -40,25 +40,23 @@ mod test {
     }
 
     #[test]
-    fn move_piece() {
-        // Creates a 2D board, With starting pieces.
-        let mut two_dimensional_board = Board::new_two_dimensional_starting_position();
-
+    fn move_piece_with_board() {
         // Creates a 1D board, With starting pieces.
         let mut one_dimensional_board = Board::new_one_dimensional_starting_position();
 
+        // Creates Coordinates from a string of 2 i8 separated by a comma.
         let from = Coordinates::from_notation_string("e2").unwrap();
-        println!("From coordinates: {:?}", from);
 
+        // Creates Coordinates from a string of 2 i8 separated by a comma.
         let to = Coordinates::from_notation_string("e4").unwrap();
-        println!("From coordinates: {:?}", to);
 
+        // Displays the board.
         one_dimensional_board.print_board_with_labels();
 
+        // Result of the move function.
         let res = one_dimensional_board.move_piece_with_coordinates(from, to);
 
-        dbg!(res);
-
+        // Displays the updated board.
         one_dimensional_board.print_board_with_labels();
     }
 }
