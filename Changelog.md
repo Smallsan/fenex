@@ -29,3 +29,9 @@
 - Added a lot of functions to piece_enum and board.
 - Changed redundant new function in the fen parser.
 - Boards can now be displayed using the print_board function.
+
+## Fenex v0.1.4 ()
+
+- Removed can_capture function from piece structs.
+- Changed function parameters in piece structs.
+- Added more functions to the piecetype wrapper enum.

@@ -33,6 +33,17 @@ impl ChessPieceEnum {
         }
     }
 
+    pub fn color(&self) -> Color {
+        match self {
+            ChessPieceEnum::Pawn(pawn) => pawn.color,
+            ChessPieceEnum::Knight(knight) => knight.color,
+            ChessPieceEnum::Bishop(bishop) => bishop.color,
+            ChessPieceEnum::Rook(rook) => rook.color,
+            ChessPieceEnum::Queen(queen) => queen.color,
+            ChessPieceEnum::King(king) => king.color,
+        }
+    }
+
     /// Update both color and coordinates of the chess piece.
     pub fn change_color_and_coordinates(&mut self, color: Color, coordinates: Coordinates) {
         match self {

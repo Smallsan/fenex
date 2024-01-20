@@ -1,4 +1,4 @@
-use crate::chess_board::coordinates::Coordinates;
+use crate::chess_board::{board::Board, coordinates::Coordinates};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PieceType {
@@ -22,7 +22,6 @@ pub trait ChessPiece {
     fn coordinates(&self) -> Coordinates;
     fn change_color(&mut self, color: Color);
     fn change_coordinates(&mut self, coordinates: Coordinates);
-    fn move_piece(&mut self, to: Coordinates) -> Result<(), &'static str>;
-    fn can_capture(&self, target: &dyn ChessPiece) -> bool;
-    fn can_move_to(&self, location: Coordinates) -> bool;
+    fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str>;
+    fn is_valid_move(&self, coordinates: Coordinates, board: &Board) -> bool;
 }

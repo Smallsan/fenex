@@ -201,19 +201,27 @@ impl Board {
         to: Coordinates,
     ) -> Result<(), &'static str> {
         // Get the piece at the 'from' coordinates.
-        let mut piece = match self.get_piece(from) {
+        let mut piece_enum = match self.get_piece(from) {
             Some(piece) => piece.clone(),
             None => return Err("No piece at the source coordinates"),
         };
+
+        let piece = piece_enum.get_piece_as_mut();
+
+        // Check if the move is valid.
+        if !piece.is_valid_move(to, self) {
+            println!("invalid move");
+            return Err("Invalid move");
+        }
 
         // Remove the piece from the 'from' coordinates.
         self.remove_piece(from);
 
         // Update the piece's coordinates.
-        piece.set_coordinates(to);
+        piece.change_coordinates(to);
 
         // Place the piece at the 'to' coordinates.
-        self.set_piece(to, piece);
+        self.set_piece(to, piece_enum);
 
         Ok(())
     }
@@ -277,7 +285,7 @@ impl Board {
         }
     }
 
-    /// Moves a piece from the source coordinates to the destination coordinates.
+    /// Force moves a piece from the source coordinates to the destination coordinates.
     pub fn move_piece(&mut self, source: Coordinates, destination: Coordinates) {
         // Remove the piece from the source coordinates.
         let piece = self.remove_piece(source);
@@ -290,8 +298,8 @@ impl Board {
         }
     }
 
-    /// Removes a piece from the given coordinates and returns it.
-    pub fn remove_piece(&mut self, coordinates: Coordinates) -> Option<ChessPieceEnum> {
+    /// Force moves a piece from the given coordinates and returns it.
+    fn remove_piece(&mut self, coordinates: Coordinates) -> Option<ChessPieceEnum> {
         match &mut self.board_type {
             BoardType::OneDimensional(board) => {
                 let index = coordinates.to_index();

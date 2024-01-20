@@ -45,18 +45,19 @@ mod test {
         let mut one_dimensional_board = Board::new_one_dimensional_starting_position();
 
         // Creates Coordinates from a string of 2 i8 separated by a comma.
-        let from = Coordinates::from_notation_string("e2").unwrap();
+        let from = Coordinates::from_notation_string("c1").unwrap();
 
         // Creates Coordinates from a string of 2 i8 separated by a comma.
-        let to = Coordinates::from_notation_string("e4").unwrap();
+        let to = Coordinates::from_notation_string("d2").unwrap();
 
         // Displays the board.
         one_dimensional_board.print_board_with_labels();
 
-        // Result of the move function.
-        let res = one_dimensional_board.move_piece_with_coordinates(from, to);
+                // Result of the move function.
+                assert!(one_dimensional_board.move_piece_with_coordinates(from, to).is_err());
+                
+                // Displays the updated board.
+                one_dimensional_board.print_board_with_labels();
 
-        // Displays the updated board.
-        one_dimensional_board.print_board_with_labels();
     }
 }

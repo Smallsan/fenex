@@ -1,3 +1,4 @@
+use crate::chess_board::board::Board;
 use crate::chess_board::coordinates::Coordinates;
 use crate::chess_piece::piece::*;
 
@@ -48,28 +49,15 @@ impl ChessPiece for Pawn {
         self.color
     }
 
-    fn move_piece(&mut self, to: Coordinates) -> Result<(), &'static str> {
+    fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
         Ok(())
-    }
-
-    fn can_capture(&self, target: &dyn ChessPiece) -> bool {
-        if self.color() != target.color() {
-            let dx = (self.coordinates().x - target.coordinates().x).abs();
-            let dy = (self.coordinates().y - target.coordinates().y).abs();
-            dx == 1 && dy == 1
-        } else {
-            false
-        }
     }
 
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
-    fn can_move_to(&self, coordinates: Coordinates) -> bool {
-        // Check if the target location is directly in front of the pawn
-        let dx = (self.coordinates().x - coordinates.x).abs();
-        let dy = (self.coordinates().y - coordinates.y).abs();
-        dx == 0 && dy == 1
+    fn is_valid_move(&self, location: Coordinates, board: &Board) -> bool {
+        true
     }
 }

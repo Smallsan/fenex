@@ -1,3 +1,4 @@
+use crate::chess_board::board::Board;
 use crate::chess_board::coordinates::Coordinates;
 use crate::chess_piece::piece::*;
 
@@ -37,22 +38,15 @@ impl ChessPiece for Knight {
         self.color
     }
 
-    fn move_piece(&mut self, to: Coordinates) -> Result<(), &'static str> {
+    fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
         Ok(())
-    }
-
-    fn can_capture(&self, target: &dyn ChessPiece) -> bool {
-        if self.color != target.color() {
-            return true;
-        }
-        false
     }
 
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
-    fn can_move_to(&self, coordinates: Coordinates) -> bool {
+    fn is_valid_move(&self, location: Coordinates, board: &Board) -> bool {
         true
     }
 }

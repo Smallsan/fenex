@@ -1,3 +1,4 @@
+use crate::chess_board::board::Board;
 use crate::chess_board::coordinates::Coordinates;
 use crate::chess_piece::piece::*;
 
@@ -41,20 +42,8 @@ impl ChessPiece for Bishop {
     /// Moves this piece to the given coordinates.
     ///
     /// If the move is not valid for this piece, returns an error.
-    fn move_piece(&mut self, to: Coordinates) -> Result<(), &'static str> {
-        if self.can_move_to(to) {
-            self.coordinates = to;
-            Ok(())
-        } else {
-            Err("Invalid move")
-        }
-    }
-
-    /// Returns whether this piece can capture the target piece.
-    ///
-    /// A piece can capture another piece if they are of different colors.
-    fn can_capture(&self, target: &dyn ChessPiece) -> bool {
-        self.color != target.color()
+    fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
+        board.move_piece_with_coordinates(self.coordinates, destination)
     }
 
     /// Returns the current location of this piece.
@@ -63,9 +52,51 @@ impl ChessPiece for Bishop {
     }
 
     /// Returns whether this piece can move to the given coordinates.
-    ///
     /// A bishop can move to a location if it is a diagonal move.
-    fn can_move_to(&self, to: Coordinates) -> bool {
-        self.coordinates.is_diagonal(to)
+    fn is_valid_move(&self, destination: Coordinates, board: &Board) -> bool {
+        // Calculate the difference between the current and target coordinates.
+        let dx = (self.coordinates.x - destination.x).abs();
+        let dy = (self.coordinates.y - destination.y).abs();
+    
+        // A bishop can move any number of squares diagonally, so the absolute difference
+        // between the x and y coordinates should be the same.
+        if dx != dy {
+            return false;
+        }
+    
+        // Check if the path to the target coordinates is clear.
+        let x_step = if destination.x > self.coordinates.x {
+            1
+        } else {
+            -1
+        };
+        let y_step = if destination.y > self.coordinates.y {
+            1
+        } else {
+            -1
+        };
+        let mut x = self.coordinates.x + x_step;
+        let mut y = self.coordinates.y + y_step;
+        while x != destination.x || y != destination.y {
+            if board.get_piece(Coordinates::new(x, y)).is_some() {
+                // There's a piece blocking the path.
+                return false;
+            }
+            x += x_step;
+            y += y_step;
+        }
+    
+        // Check the destination square.
+        if let Some(target_piece) = board.get_piece(destination) {
+            // Enemy piece in location
+            if target_piece.color() != self.color {
+                return true;
+            }
+        
+            // There's a piece at the destination.
+            return false;
+        }
+    
+        true
     }
 }

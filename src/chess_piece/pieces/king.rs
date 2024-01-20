@@ -1,3 +1,4 @@
+use crate::chess_board::board::Board;
 use crate::chess_board::coordinates::Coordinates;
 use crate::chess_piece::piece::*;
 
@@ -65,28 +66,18 @@ impl ChessPiece for King {
     ///
     /// If the move is not valid for this piece (i.e., not a one-square move),
     /// returns an error.
-    fn move_piece(&mut self, to: Coordinates) -> Result<(), &'static str> {
-        if self.can_move_one_square(to) {
-            self.coordinates = to;
-            Ok(())
-        } else {
-            Err("Invalid move")
+    fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
+        if !self.is_valid_move(destination, board) {
+            return Err("Invalid move for king");
         }
-    }
-
-    fn can_capture(&self, target: &dyn ChessPiece) -> bool {
-        if self.color != target.color() {
-            return true;
-        }
-        false
+        Ok(())
     }
 
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
-    fn can_move_to(&self, to: Coordinates) -> bool {
-        // Check if the move is one square in any direction
-        (self.coordinates.x - to.x).abs() <= 1 && (self.coordinates.y - to.y).abs() <= 1
+    fn is_valid_move(&self, location: Coordinates, board: &Board) -> bool {
+        true
     }
 }
