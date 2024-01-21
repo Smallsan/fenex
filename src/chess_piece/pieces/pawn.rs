@@ -10,7 +10,11 @@ pub struct Pawn {
 }
 impl Pawn {
     pub fn new(color: Color, coordinates: Coordinates, has_moved: bool) -> Pawn {
-        Pawn {color, coordinates, has_moved}
+        Pawn {
+            color,
+            coordinates,
+            has_moved,
+        }
     }
 }
 impl ChessPiece for Pawn {
@@ -44,7 +48,7 @@ impl ChessPiece for Pawn {
         // Calculate the difference between the current and target coordinates.
         let dx = (self.coordinates.x - destination.x).abs();
         let dy = (self.coordinates.y - destination.y).abs();
-    
+
         // A pawn can move forward one square if that square is unoccupied.
         if dx == 0 && dy == 1 {
             if board.get_piece(destination).is_none() {
@@ -52,7 +56,7 @@ impl ChessPiece for Pawn {
                 return true;
             }
         }
-    
+
         // A pawn can move forward diagonally one square to capture an opponent's piece.
         if dx == 1 && dy == 1 {
             if let Some(piece) = board.get_piece(destination) {
@@ -62,7 +66,7 @@ impl ChessPiece for Pawn {
                 }
             }
         }
-    
+
         // A pawn can move forward two squares from its starting position if both squares are unoccupied.
         if dx == 0 && dy == 2 {
             let y_between = (self.coordinates.y + destination.y) / 2;
@@ -77,7 +81,7 @@ impl ChessPiece for Pawn {
                 return true;
             }
         }
-    
+
         false
     }
 }

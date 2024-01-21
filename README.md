@@ -4,92 +4,79 @@ Fenex is a Rust library for handling chess game logic. It provides support for p
 
 ## Features
 
-## Fen Module
+## Coordinates And Notations
 
-The Fen module provides the `Fen` struct for representing a chess position in Forsyth-Edwards Notation (FEN).
-
-### `Fen` Struct
-
-- **Constructor:** `Fen::new(board: &str) -> Fen`
-  - Creates a new `Fen` struct from a given board position string.
-
-- **Parser:** `Fen::parse_fen(fen_str: &str) -> Result<Fen, &'static str>`
-  - Parses a FEN string into a `Fen` struct.
-
-- **Debug Printing:** `Fen::debug()`
-  - Prints the values inside the `Fen` struct for debugging purposes.
-
-- **Board Printing:** `Fen::print_to_board()`
-  - Prints the chess board to the console.
-
-- **Board Conversion:** `Fen::boardify() -> String`
-  - Converts the `Fen` struct into a string representation of a chess board.
-
-## Coordinates Module
-
-The Coordinates module provides the `Coordinates` struct for representing a position on the chess board.
+Both Coordinates and Notations are 1-indexed.
 
 ### `Coordinates` Struct
 
+The Coordinates module provides the `Coordinates` struct for representing a position on the chess board.
+
 - **Constructor:** `Coordinates { x: i8, y: i8 }`
+
   - Creates a new `Coordinates` struct with given x and y values.
 
 - **From Notation:** `Coordinates::from_notation(notation: Notation) -> Result<Coordinates, &'static str>`
+
   - Converts a `Notation` struct into a `Coordinates` struct.
 
 - **To Notation:** `Coordinates::to_notation(&self) -> Result<Notation, &'static str>`
   - Converts the `Coordinates` struct into a `Notation` struct.
 
-## Notation Module
+### `Notation` Struct
 
 The Notation module provides the `Notation` struct for representing a chess move in algebraic notation.
 
-### `Notation` Struct
-
 - **Constructor:** `Notation::new(file: char, rank: char) -> Option<Notation>`
+
   - Creates a new `Notation` struct with given file and rank values.
 
 - **From Coordinates:** `Notation::from_coordinates(coordinates: Coordinates) -> Result<Notation, &'static str>`
+
   - Converts a `Coordinates` struct into a `Notation` struct.
 
 - **To Coordinates:** `Notation::to_coordinates(&self) -> Result<Coordinates, &'static str>`
   - Converts the `Notation` struct into a `Coordinates` struct.
 
-## ChessPieceEnum Module
-
-The `ChessPieceEnum` module defines the `ChessPieceEnum` enum, representing different types of chess pieces, and provides methods for updating both color and coordinates.
-
-## BoardType Module
-
-The `BoardType` module defines the `BoardType` enum, representing different types of chess boards (1D and 2D).
-
-## Board Module
-
-The `Board` module provides the `Board` struct for handling chess boards in both 1D and 2D representations.
+## Boards And Movements
 
 ### `Board` Struct
 
+The `Board` module provides the `Board` struct for handling chess boards in both 1D and 2D representations.
+
 - **Constructor:** `Board::new_one_dimensional() -> Board` and `Board::new_two_dimensional() -> Board`
+
   - Creates a new `1D` or `2D` board with all squares empty.
 
 - **Starting Position:** `Board::new_one_dimensional_starting_position() -> Board` and `Board::new_two_dimensional_starting_position() -> Board`
+
   - Creates a new `1D` or `2D` board with pieces in the starting position.
 
 - **Set Piece:** `Board::set_piece(&mut self, coordinates: Coordinates, piece: ChessPieceEnum)`
+
   - Sets a piece at the given coordinates.
 
 - **Get Piece:** `Board::get_piece(&self, coordinates: Coordinates) -> Option<&ChessPieceEnum>`
+
   - Gets the piece at the given coordinates.
+
+- **Generate Moves:** `Board::generate_moves(&self, color: Color) -> Vec<Move>`
+  - Generates all valid moves for the pieces of the given color on the board.
+
+### `Move` Struct
+
+The `Move` struct represents a move in a chess game. It contains the type of the piece being moved and the start and end coordinates of the move.
+
+- **Constructor:** `Move::new(from: Coordinates, to: Coordinates, piece_type: PieceType) -> Move`
+  - Creates a new `Move` with the given start and end coordinates, and the type of the piece being moved.
 
 ## How To Install
 
-Just run the ```cargo add fenex```in your project directory.
+Just run the `cargo add fenex`in your project directory.
 
-Or add ```fenex = "0.1.3"``` in your Cargo.toml, Under dependencies.
+Or add `fenex = "0.1.3"` in your Cargo.toml, Under dependencies.
 
-## Sample Uses
-
-### Coordinates and Notations
+## Examples
 
 ```rust
     fn create_notation_and_coordinates() {
@@ -108,8 +95,6 @@ Or add ```fenex = "0.1.3"``` in your Cargo.toml, Under dependencies.
         let coordinate_from_string = Coordinates::from_string("5,4").unwrap();
     }
 ```
-
-### Boards
 
 ```rust
     fn move_piece_with_board() {
