@@ -69,7 +69,7 @@ impl ChessPiece for Queen {
         let mut x = self.coordinates.x + x_step;
         let mut y = self.coordinates.y + y_step;
         while x != destination.x || y != destination.y {
-            if let Some(piece) = board.get_piece(Coordinates::new(x, y)) {
+            if let Some(_piece) = board.get_piece(Coordinates::new(x, y)) {
                 // There's a piece blocking the path.
                 return false;
             }

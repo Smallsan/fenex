@@ -1,5 +1,4 @@
 use crate::chess_board::movement::Move;
-use crate::piece;
 use crate::{
     bishop::Bishop, chess_piece::piece_enum::ChessPieceEnum, coordinates::Coordinates, king::King,
     knight::Knight, notation::Notation, pawn::Pawn, piece::Color, queen::Queen, rook::Rook,

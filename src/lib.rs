@@ -10,15 +10,12 @@ pub use chess_piece::pieces::{bishop, king, knight, pawn, queen, rook};
 
 #[cfg(test)]
 mod test {
+    use crate::chess_board::movement::Move;
     use crate::chess_piece::piece::Color;
     use crate::{chess_board::board::Board, coordinates::Coordinates, notation::Notation};
 
     #[test]
-    // Creating a Notation and Coordinates object.
-    fn create_notation_and_coordinates() {
-
-        // Notations and Coordinates are 1-indexed
-
+    fn notation_and_coordinates() {
         // Creates a Notation from chars. ('file' 'rank').
         let notation: Notation = Notation::new('e', '4').unwrap();
 
@@ -33,29 +30,9 @@ mod test {
         let coordinate_from_string: Coordinates = Coordinates::from_string("5,4").unwrap();
     }
 
-    #[test]
-    fn move_piece_with_board() {
-        // Creates a 1D board, With starting pieces.
-        let mut one_dimensional_board = Board::new_one_dimensional_starting_position();
-
-        // Displays the board.
-        one_dimensional_board.print_board_with_labels();
-
-        // Displays the updated board.
-        one_dimensional_board.print_board_with_labels();
-    }
 
     #[test]
-    fn generates_moves() {
-        // Creates a 1D board, With starting pieces.
-        let mut two_dimensional_board = Board::new_two_dimensional_starting_position();
-
-        // generate all moves for white.
-        let movement = two_dimensional_board.generate_moves(Color::Black);
-    }
-
-    // all about boards
-    fn boards() {
+    fn boards_and_moves() {
         // Creates a 2D board, With starting pieces.
         let mut two_dimensional_board = Board::new_two_dimensional_starting_position();
 
@@ -68,7 +45,12 @@ mod test {
         // Creates Coordinates from a string of 2 i8 separated by a comma.
         let to = Coordinates::from_notation_string("e4").unwrap();
 
+
         // Moves a piece from one coordinate to another.
         one_dimensional_board.move_piece_with_coordinates(from, to);
+
+        // Generates all possible movements for White.
+        let movement = one_dimensional_board.generate_moves(Color::White);
+
     }
 }

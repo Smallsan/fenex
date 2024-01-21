@@ -30,8 +30,11 @@
 - Changed redundant new function in the fen parser.
 - Boards can now be displayed using the print_board function.
 
-## Fenex v0.1.4 ()
+## Fenex v0.1.4 (1/21/2024)
 
 - Removed can_capture function from piece structs.
 - Changed function parameters in piece structs.
 - Added more functions to the piecetype wrapper enum.
+- Pieces now have is_valid_move functions.
+- Board can now generate all the possible moves in the current position.
+- Added has_moved value inside the king, pawn and rook struct.
