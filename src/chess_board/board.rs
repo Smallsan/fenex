@@ -1,3 +1,4 @@
+use crate::chess_board::movement::Move;
 use crate::{
     bishop::Bishop, chess_piece::piece_enum::ChessPieceEnum, coordinates::Coordinates, king::King,
     knight::Knight, notation::Notation, pawn::Pawn, piece::Color, queen::Queen, rook::Rook,
@@ -15,6 +16,7 @@ pub enum BoardType {
 pub struct Board {
     pub board_type: BoardType,
     pub color_to_move: Color,
+    pub is_in_check: bool,
 }
 
 impl Board {
@@ -23,6 +25,7 @@ impl Board {
         Board {
             board_type: BoardType::OneDimensional(vec![None; 64]),
             color_to_move: Color::White,
+            is_in_check: false,
         }
     }
     /// Creates a new `2D Board` with all squares empty.
@@ -30,6 +33,7 @@ impl Board {
         Board {
             board_type: BoardType::TwoDimensional([[None; 8]; 8]),
             color_to_move: Color::White,
+            is_in_check: false,
         }
     }
 
@@ -42,10 +46,12 @@ impl Board {
             board[i] = Some(ChessPieceEnum::Pawn(Pawn {
                 color: Color::White,
                 coordinates: Coordinates::from_index(i),
+                has_moved: false
             }));
             board[i + 40] = Some(ChessPieceEnum::Pawn(Pawn {
                 color: Color::Black,
                 coordinates: Coordinates::from_index(i + 40),
+                has_moved: false
             }));
         }
 
@@ -124,6 +130,7 @@ impl Board {
         Board {
             board_type: BoardType::OneDimensional(board),
             color_to_move: Color::White,
+            is_in_check: false,
         }
     }
 
@@ -147,11 +154,11 @@ impl Board {
             board.set_piece(Coordinates::new(i, 1), piece.clone());
             board.set_piece(
                 Coordinates::new(i, 2),
-                ChessPieceEnum::Pawn(Pawn::new(Color::White, Coordinates::new(i, 2))),
+                ChessPieceEnum::Pawn(Pawn::new(Color::White, Coordinates::new(i, 2), false)),
             );
             board.set_piece(
                 Coordinates::new(i, 7),
-                ChessPieceEnum::Pawn(Pawn::new(Color::Black, Coordinates::new(i, 7))),
+                ChessPieceEnum::Pawn(Pawn::new(Color::Black, Coordinates::new(i, 7), false)),
             );
 
             // Update color and coordinates for the black pieces on the back rank
@@ -350,5 +357,27 @@ impl Board {
                 }
             }
         }
+    }
+    pub fn generate_moves(&self, color: Color) -> Vec<Move> {
+        let mut moves = Vec::new();
+
+        for x_from in 0..8 {
+            for y_from in 0..8 {
+                if let Some(piece) = self.get_piece(Coordinates::new(x_from, y_from)) {
+                    if piece.color() == color {
+                        for x_to in 0..8 {
+                            for y_to in 0..8 {
+                                let destination = Coordinates::new(x_to, y_to);
+                                if piece.is_valid_move(destination, self) {
+                                    moves.push(Move::new(piece.coordinates(), destination));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        moves
     }
 }

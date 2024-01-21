@@ -1,5 +1,6 @@
 use crate::{
     bishop::Bishop,
+    chess_board::board::Board,
     coordinates::Coordinates,
     king::King,
     knight::Knight,
@@ -22,7 +23,7 @@ pub enum ChessPieceEnum {
 
 impl ChessPieceEnum {
     /// Returns chess piece type.
-    pub fn get_piece_type(&self) -> PieceType {
+    pub fn piece_type(&self) -> PieceType {
         match self {
             ChessPieceEnum::Pawn(_) => PieceType::Pawn,
             ChessPieceEnum::Knight(_) => PieceType::Knight,
@@ -41,6 +42,28 @@ impl ChessPieceEnum {
             ChessPieceEnum::Rook(rook) => rook.color,
             ChessPieceEnum::Queen(queen) => queen.color,
             ChessPieceEnum::King(king) => king.color,
+        }
+    }
+
+    pub fn coordinates(&self) -> Coordinates {
+        match self {
+            ChessPieceEnum::Pawn(pawn) => pawn.coordinates,
+            ChessPieceEnum::Knight(knight) => knight.coordinates,
+            ChessPieceEnum::Bishop(bishop) => bishop.coordinates,
+            ChessPieceEnum::Rook(rook) => rook.coordinates,
+            ChessPieceEnum::Queen(queen) => queen.coordinates,
+            ChessPieceEnum::King(king) => king.coordinates,
+        }
+    }
+
+    pub fn is_valid_move(&self, destination: Coordinates, board: &Board) -> bool {
+        match self {
+            ChessPieceEnum::Pawn(mut pawn) => pawn.is_valid_move(destination, &board),
+            ChessPieceEnum::Knight(mut knight) => knight.is_valid_move(destination, &board),
+            ChessPieceEnum::Bishop(mut bishop) => bishop.is_valid_move(destination, &board),
+            ChessPieceEnum::Rook(mut rook) => rook.is_valid_move(destination, &board),
+            ChessPieceEnum::Queen(mut queen) => queen.is_valid_move(destination, &board),
+            ChessPieceEnum::King(mut king) => king.is_valid_move(destination, &board),
         }
     }
 

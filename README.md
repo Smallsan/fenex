@@ -85,7 +85,7 @@ The `Board` module provides the `Board` struct for handling chess boards in both
 
 Just run the ```cargo add fenex```in your project directory.
 
-Or add ```fenex = "0.1.2"``` in your Cargo.toml, Under dependencies.
+Or add ```fenex = "0.1.3"``` in your Cargo.toml, Under dependencies.
 
 ## Sample Uses
 

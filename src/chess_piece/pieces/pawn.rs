@@ -6,28 +6,11 @@ use crate::chess_piece::piece::*;
 pub struct Pawn {
     pub color: Color,
     pub coordinates: Coordinates,
+    pub has_moved: bool,
 }
 impl Pawn {
-    pub fn new(color: Color, coordinates: Coordinates) -> Pawn {
-        Pawn { color, coordinates }
-    }
-    pub fn can_move_forward(&self) -> bool {
-        true
-    }
-    pub fn can_move_two_squares(&self) -> bool {
-        true
-    }
-    pub fn can_capture_diagonally(&self) -> bool {
-        true
-    }
-    pub fn can_be_promoted(&self) -> bool {
-        true
-    }
-    pub fn can_be_en_passanted(&self) -> bool {
-        true
-    }
-    pub fn can_be_captured_en_passant(&self) -> bool {
-        true
+    pub fn new(color: Color, coordinates: Coordinates, has_moved: bool) -> Pawn {
+        Pawn {color, coordinates, has_moved}
     }
 }
 impl ChessPiece for Pawn {
@@ -50,14 +33,51 @@ impl ChessPiece for Pawn {
     }
 
     fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
-        Ok(())
+        board.move_piece_with_coordinates(self.coordinates, destination)
     }
 
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
-    fn is_valid_move(&self, location: Coordinates, board: &Board) -> bool {
-        true
+    fn is_valid_move(&mut self, destination: Coordinates, board: &Board) -> bool {
+        // Calculate the difference between the current and target coordinates.
+        let dx = (self.coordinates.x - destination.x).abs();
+        let dy = (self.coordinates.y - destination.y).abs();
+    
+        // A pawn can move forward one square if that square is unoccupied.
+        if dx == 0 && dy == 1 {
+            if board.get_piece(destination).is_none() {
+                self.has_moved = true;
+                return true;
+            }
+        }
+    
+        // A pawn can move forward diagonally one square to capture an opponent's piece.
+        if dx == 1 && dy == 1 {
+            if let Some(piece) = board.get_piece(destination) {
+                if piece.color() != self.color {
+                    self.has_moved = true;
+                    return true;
+                }
+            }
+        }
+    
+        // A pawn can move forward two squares from its starting position if both squares are unoccupied.
+        if dx == 0 && dy == 2 {
+            let y_between = (self.coordinates.y + destination.y) / 2;
+            let between = Coordinates::new(self.coordinates.x, y_between);
+            if !self.has_moved
+                && ((self.color == Color::White && self.coordinates.y == 2)
+                    || (self.color == Color::Black && self.coordinates.y == 7))
+                && board.get_piece(destination).is_none()
+                && board.get_piece(between).is_none()
+            {
+                self.has_moved = true;
+                return true;
+            }
+        }
+    
+        false
     }
 }

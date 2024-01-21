@@ -53,17 +53,17 @@ impl ChessPiece for Bishop {
 
     /// Returns whether this piece can move to the given coordinates.
     /// A bishop can move to a location if it is a diagonal move.
-    fn is_valid_move(&self, destination: Coordinates, board: &Board) -> bool {
+    fn is_valid_move(&mut self, destination: Coordinates, board: &Board) -> bool {
         // Calculate the difference between the current and target coordinates.
         let dx = (self.coordinates.x - destination.x).abs();
         let dy = (self.coordinates.y - destination.y).abs();
-    
+
         // A bishop can move any number of squares diagonally, so the absolute difference
         // between the x and y coordinates should be the same.
         if dx != dy {
             return false;
         }
-    
+
         // Check if the path to the target coordinates is clear.
         let x_step = if destination.x > self.coordinates.x {
             1
@@ -85,18 +85,15 @@ impl ChessPiece for Bishop {
             x += x_step;
             y += y_step;
         }
-    
+
         // Check the destination square.
         if let Some(target_piece) = board.get_piece(destination) {
             // Enemy piece in location
             if target_piece.color() != self.color {
-                return true;
+                return false;
             }
-        
-            // There's a piece at the destination.
-            return false;
         }
-    
+
         true
     }
 }

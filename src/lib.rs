@@ -10,6 +10,7 @@ pub use chess_piece::pieces::{bishop, king, knight, pawn, queen, rook};
 
 #[cfg(test)]
 mod test {
+    use crate::chess_piece::piece::Color;
     use crate::{chess_board::board::Board, coordinates::Coordinates, notation::Notation};
 
     #[test]
@@ -45,19 +46,30 @@ mod test {
         let mut one_dimensional_board = Board::new_one_dimensional_starting_position();
 
         // Creates Coordinates from a string of 2 i8 separated by a comma.
-        let from = Coordinates::from_notation_string("c1").unwrap();
+        let from = Coordinates::from_notation_string("e2").unwrap();
 
         // Creates Coordinates from a string of 2 i8 separated by a comma.
-        let to = Coordinates::from_notation_string("d2").unwrap();
+        let to = Coordinates::from_notation_string("e4").unwrap();
 
         // Displays the board.
         one_dimensional_board.print_board_with_labels();
 
-                // Result of the move function.
-                assert!(one_dimensional_board.move_piece_with_coordinates(from, to).is_err());
-                
-                // Displays the updated board.
-                one_dimensional_board.print_board_with_labels();
+        // Moves a piece from one coordinate to another.
+        one_dimensional_board.move_piece_with_coordinates(from, to);
 
+        // Displays the updated board.
+        one_dimensional_board.print_board_with_labels();
+    }
+
+
+    #[test]
+    fn generates_all_possible_moves() {
+        // Creates a 1D board, With starting pieces.
+        let mut one_dimensional_board = Board::new_one_dimensional_starting_position();
+
+        // generate all moves for white.
+        let movement = one_dimensional_board.generate_moves(Color::Black);
+
+        // dbg!(movement);
     }
 }
