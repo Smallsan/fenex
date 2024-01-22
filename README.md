@@ -74,12 +74,11 @@ The `Move` struct represents a move in a chess game. It contains the type of the
 
 Just run the `cargo add fenex`in your project directory.
 
-Or add `fenex = "0.1.3"` in your Cargo.toml, Under dependencies.
+Or add `fenex = "0.1.4"` in your Cargo.toml, Under dependencies.
 
 ## Examples
 
 ```rust
-   #[test]
     fn notation_and_coordinates() {
         // Creates a Notation from chars. ('file' 'rank').
         let notation: Notation = Notation::new('e', '4').unwrap();

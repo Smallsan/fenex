@@ -16,6 +16,15 @@ pub enum Color {
     Black,
 }
 
+impl Color {
+    pub fn reverse(&self) -> Color {
+        match self {
+            Color::White => Color::Black,
+            Color::Black => Color::White,
+        }
+    }
+}
+
 pub trait ChessPiece {
     fn piece_type(&self) -> PieceType;
     fn color(&self) -> Color;

@@ -77,9 +77,18 @@ impl ChessPiece for Bishop {
         };
         let mut x = self.coordinates.x + x_step;
         let mut y = self.coordinates.y + y_step;
+
         while x != destination.x || y != destination.y {
+            if x < 1 || x > 8 || y < 1 || y > 8 {
+                return false;
+            }
             if board.get_piece(Coordinates::new(x, y)).is_some() {
-                // There's a piece blocking the path.
+                return false;
+            }
+            if x_step > 0 && x == 8 || x_step < 0 && x == 1 {
+                return false;
+            }
+            if y_step > 0 && y == 8 || y_step < 0 && y == 1 {
                 return false;
             }
             x += x_step;
@@ -88,12 +97,10 @@ impl ChessPiece for Bishop {
 
         // Check the destination square.
         if let Some(target_piece) = board.get_piece(destination) {
-            // Enemy piece in location
-            if target_piece.color() != self.color {
+            if target_piece.color() == self.color {
                 return false;
             }
         }
-
         true
     }
 }

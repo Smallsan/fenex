@@ -15,7 +15,7 @@ impl Move {
             piece_type,
         }
     }
-    
+
     pub fn from(&self) -> Coordinates {
         self.from
     }

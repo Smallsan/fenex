@@ -37,11 +37,23 @@ impl Coordinates {
     }
 
     /// Creates a `Coordinates` instance from a string representation of notations.
-    pub fn from_notation_string(input: &str) -> Result<Coordinates, &'static str> {
-        let notation = Notation::from_string(input)?;
-        Coordinates::from_notation(notation)
-    }
+    pub fn from_notation_string(s: &str) -> Result<Self, &'static str> {
+        if s.len() != 2 {
+            return Err("Invalid notation string");
+        }
 
+        let file = s.chars().nth(0).unwrap().to_ascii_lowercase();
+        let rank = s.chars().nth(1).unwrap().to_digit(10).unwrap();
+
+        if file < 'a' || file > 'h' || rank < 1 || rank > 8 {
+            return Err("Invalid notation string");
+        }
+
+        let x = file as i8 - 'a' as i8 + 1;
+        let y = rank as i8;
+
+        Ok(Self { x, y })
+    }
     /// Converts the `Coordinates` instance to a string representation.
     pub fn to_string(&self) -> String {
         format!("{}{}", self.x + 1, self.y + 1)
@@ -89,10 +101,13 @@ impl Coordinates {
     }
 
     /// Converts the `Coordinates` instance to an index in a 1D array representation of the board.
-    pub fn to_index(&self) -> usize {
+    pub fn to_index(&self) -> Result<usize, &'static str> {
+        if self.y < 1 || self.y > 8 {
+            return Err("y coordinate is out of bounds");
+        }
         let x = (self.x - 1) as usize;
         let y = (self.y - 1) as usize;
-        y * 8 + x
+        Ok(y * 8 + x)
     }
 
     /// Creates a `Coordinates` instance from an index in a 1D array representation of the board.

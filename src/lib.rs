@@ -10,7 +10,6 @@ pub use chess_piece::pieces::{bishop, king, knight, pawn, queen, rook};
 
 #[cfg(test)]
 mod test {
-    use crate::chess_board::movement::Move;
     use crate::chess_piece::piece::Color;
     use crate::{chess_board::board::Board, coordinates::Coordinates, notation::Notation};
 
@@ -27,9 +26,8 @@ mod test {
 
         // Creates Coordinates from a string of 2 i8 separated by a comma.
         // ("4.3").
-        let coordinate_from_string: Coordinates = Coordinates::from_string("5,4").unwrap();
+        let coordinate_from_string: Coordinates = Coordinates::from_string("4,3").unwrap();
     }
-
 
     #[test]
     fn boards_and_moves() {
@@ -45,12 +43,12 @@ mod test {
         // Creates Coordinates from a string of 2 i8 separated by a comma.
         let to = Coordinates::from_notation_string("e4").unwrap();
 
-
         // Moves a piece from one coordinate to another.
         one_dimensional_board.move_piece_with_coordinates(from, to);
 
         // Generates all possible movements for White.
         let movement = one_dimensional_board.generate_moves(Color::White);
 
+        dbg!(movement);
     }
 }

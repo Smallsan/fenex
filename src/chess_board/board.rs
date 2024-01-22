@@ -1,4 +1,5 @@
 use crate::chess_board::movement::Move;
+use crate::piece::PieceType;
 use crate::{
     bishop::Bishop, chess_piece::piece_enum::ChessPieceEnum, coordinates::Coordinates, king::King,
     knight::Knight, notation::Notation, pawn::Pawn, piece::Color, queen::Queen, rook::Rook,
@@ -175,7 +176,7 @@ impl Board {
         match &mut self.board_type {
             BoardType::OneDimensional(board) => {
                 let index = coordinates.to_index();
-                board[index] = Some(piece);
+                board[index.expect("Index is out of bounds")] = Some(piece);
             }
 
             BoardType::TwoDimensional(board) => {
@@ -190,8 +191,10 @@ impl Board {
     pub fn get_piece(&self, coordinates: Coordinates) -> Option<&ChessPieceEnum> {
         match &self.board_type {
             BoardType::OneDimensional(board) => {
-                let index = coordinates.to_index();
-                board[index].as_ref()
+                match coordinates.to_index() {
+                    Ok(index) if index < board.len() => board[index].as_ref(),
+                    _ => None,
+                }
             }
             BoardType::TwoDimensional(board) => {
                 let x = (coordinates.x - 1) as usize;
@@ -306,11 +309,11 @@ impl Board {
     }
 
     /// Force moves a piece from the given coordinates and returns it.
-    fn remove_piece(&mut self, coordinates: Coordinates) -> Option<ChessPieceEnum> {
+    pub fn remove_piece(&mut self, coordinates: Coordinates) -> Option<ChessPieceEnum> {
         match &mut self.board_type {
             BoardType::OneDimensional(board) => {
                 let index = coordinates.to_index();
-                board[index].take()
+                board[index.expect("Index is out of bounds")].take()
             }
             BoardType::TwoDimensional(board) => {
                 let x = (coordinates.x - 1) as usize;
@@ -409,5 +412,30 @@ impl Board {
         }
 
         moves
+    }
+    pub fn is_king_in_check(&self, color: Color) -> bool {
+        let king_position = self.find_king(color);
+        let opponent_color = match color {
+            Color::White => Color::Black,
+            Color::Black => Color::White,
+        };
+        let opponent_moves = self.generate_moves(opponent_color);
+        opponent_moves
+            .iter()
+            .any(|m| m.to() == king_position.expect("Couldn't find the king's position"))
+    }
+
+    fn find_king(&self, color: Color) -> Option<Coordinates> {
+        for rank in 0..8 {
+            for file in 0..8 {
+                let coordinates = Coordinates::new(rank, file);
+                if let Some(piece) = self.get_piece(coordinates) {
+                    if piece.color() == color && piece.piece_type() == PieceType::King {
+                        return Some(coordinates);
+                    }
+                }
+            }
+        }
+        None
     }
 }
