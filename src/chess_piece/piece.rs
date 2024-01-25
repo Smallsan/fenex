@@ -25,6 +25,25 @@ impl Color {
     }
 }
 
+#[derive(Debug, PartialEq)]
+pub struct CastlingRights {
+    pub white_kingside: bool,
+    pub white_queenside: bool,
+    pub black_kingside: bool,
+    pub black_queenside: bool,
+}
+
+impl Default for CastlingRights {
+    fn default() -> Self {
+        Self {
+            white_kingside: true,
+            white_queenside: true,
+            black_kingside: true,
+            black_queenside: true,
+        }
+    }
+}
+
 pub trait ChessPiece {
     fn piece_type(&self) -> PieceType;
     fn color(&self) -> Color;

@@ -38,3 +38,8 @@
 - Pieces now have is_valid_move functions.
 - Board can now generate all the possible moves in the current position.
 - Added has_moved value inside the king, pawn and rook struct.
+
+## Fenex v0.1.5 (1/25/2024)
+
+- Added fields to the board struct.
+  

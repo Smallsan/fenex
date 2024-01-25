@@ -1,5 +1,5 @@
 use crate::chess_board::movement::Move;
-use crate::piece::PieceType;
+use crate::piece::{CastlingRights, PieceType};
 use crate::{
     bishop::Bishop, chess_piece::piece_enum::ChessPieceEnum, coordinates::Coordinates, king::King,
     knight::Knight, notation::Notation, pawn::Pawn, piece::Color, queen::Queen, rook::Rook,
@@ -18,6 +18,10 @@ pub struct Board {
     pub board_type: BoardType,
     pub color_to_move: Color,
     pub is_in_check: bool,
+    pub castling_rights: CastlingRights,
+    pub en_passant_target: Option<Coordinates>,
+    pub halfmove_clock: u32,
+    pub fullmove_number: u32,
 }
 
 impl Board {
@@ -27,14 +31,23 @@ impl Board {
             board_type: BoardType::OneDimensional(vec![None; 64]),
             color_to_move: Color::White,
             is_in_check: false,
+            castling_rights: CastlingRights::default(),
+            en_passant_target: None,
+            halfmove_clock: 0,
+            fullmove_number: 1,
         }
     }
+    
     /// Creates a new `2D Board` with all squares empty.
     pub fn new_two_dimensional() -> Self {
         Board {
             board_type: BoardType::TwoDimensional([[None; 8]; 8]),
             color_to_move: Color::White,
             is_in_check: false,
+            castling_rights: CastlingRights::default(),
+            en_passant_target: None,
+            halfmove_clock: 0,
+            fullmove_number: 1,
         }
     }
 
@@ -132,6 +145,10 @@ impl Board {
             board_type: BoardType::OneDimensional(board),
             color_to_move: Color::White,
             is_in_check: false,
+            castling_rights: CastlingRights::default(),
+            en_passant_target: None,
+            halfmove_clock: 0,
+            fullmove_number: 1,
         }
     }
 
@@ -248,8 +265,8 @@ impl Board {
     }
 
     /// Returns the color to move.
-    pub fn get_color_to_move(&self) -> Color {
-        self.color_to_move
+    pub fn get_color_to_move(&self) -> &Color {
+        &self.color_to_move
     }
 
     /// Changes the color to move.
@@ -308,7 +325,7 @@ impl Board {
         }
     }
 
-    /// Force moves a piece from the given coordinates and returns it.
+    /// Force removes a piece from the given coordinates and returns it.
     pub fn remove_piece(&mut self, coordinates: Coordinates) -> Option<ChessPieceEnum> {
         match &mut self.board_type {
             BoardType::OneDimensional(board) => {
