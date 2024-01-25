@@ -1,4 +1,3 @@
-use super::board::Board;
 
 /// Represents a FEN (Forsyth–Edwards Notation) chess position.
 
