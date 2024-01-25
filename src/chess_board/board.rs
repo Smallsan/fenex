@@ -378,6 +378,7 @@ impl Board {
             }
         }
     }
+    /// Generates all possible moves for a chess color in the board.
     pub fn generate_moves(&self, color: Color) -> Vec<Move> {
         let mut moves = Vec::new();
 
@@ -430,21 +431,21 @@ impl Board {
 
         moves
     }
+
+    // Checks if the king is undercheck.
     pub fn is_king_in_check(&self, color: Color) -> bool {
         let king_position = self.find_king(color);
-        let opponent_color = match color {
-            Color::White => Color::Black,
-            Color::Black => Color::White,
-        };
+        let opponent_color = color.reverse();
         let opponent_moves = self.generate_moves(opponent_color);
         opponent_moves
             .iter()
             .any(|m| m.to() == king_position.expect("Couldn't find the king's position"))
     }
 
+    /// finds the king piece in the board and returns it's coordinates.
     fn find_king(&self, color: Color) -> Option<Coordinates> {
-        for rank in 0..8 {
-            for file in 0..8 {
+        for rank in 1..=8 {
+            for file in 1..=8 {
                 let coordinates = Coordinates::new(rank, file);
                 if let Some(piece) = self.get_piece(coordinates) {
                     if piece.color() == color && piece.piece_type() == PieceType::King {
