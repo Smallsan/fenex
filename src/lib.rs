@@ -49,6 +49,11 @@ mod test {
         // Generates all possible movements for White.
         let movement = one_dimensional_board.generate_moves(Color::White);
 
-        dbg!(movement);
-    }
+        // Checks if the king is in check in the position.
+        let is_in_check = one_dimensional_board.is_king_in_check(Color::White);
+
+    
+    
+    
+     }
 }
