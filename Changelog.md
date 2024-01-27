@@ -43,4 +43,5 @@
 
 - Added fields to the board struct.
 - Heavy refactoring changed everything dhjfkghwhjfgwjhgf.
+- is valid move now checks for pins and checks.
   

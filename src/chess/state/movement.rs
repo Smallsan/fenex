@@ -6,7 +6,7 @@ use crate::chess::{
     piece::piece::{Color, PieceType},
 };
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Move {
     piece_type: PieceType,
     from: Coordinates,
@@ -90,5 +90,20 @@ impl Board {
         }
 
         moves
+    }
+    /// Makes a move in the board, Without considering legality.
+    pub fn make_move_unchecked(&mut self, m: Move) {
+        match &mut self.board_type {
+            BoardType::OneDimensional(board) => {
+                let from_index = m.from.to_index().expect("Invalid from coordinates");
+                let to_index = m.to.to_index().expect("Invalid to coordinates");
+                board[to_index] = board[from_index].take();
+            }
+            BoardType::TwoDimensional(board) => {
+                let (from_x, from_y) = m.from.to_tuple();
+                let (to_x, to_y) = m.to.to_tuple();
+                board[to_x][to_y] = board[from_x][from_y].take();
+            }
+        }
     }
 }

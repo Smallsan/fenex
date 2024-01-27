@@ -7,14 +7,14 @@ use crate::chess::piece::{
 use super::{coordinates::Coordinates, notation::Notation};
 
 /// The BoardType represents the different types of chess boards.
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum BoardType {
     OneDimensional(Vec<Option<ChessPieceEnum>>),
     TwoDimensional([[Option<ChessPieceEnum>; 8]; 8]),
 }
 
 /// The Board represents a chess board.
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Board {
     pub board_type: BoardType,
     pub color_to_move: Color,
@@ -36,6 +36,18 @@ impl Board {
             en_passant_target: None,
             halfmove_clock: 0,
             fullmove_number: 1,
+        }
+    }
+
+    pub fn clone(&self) -> Self {
+        Board {
+            board_type: self.board_type.clone(),
+            color_to_move: self.color_to_move,
+            is_in_check: self.is_in_check,
+            castling_rights: self.castling_rights,
+            en_passant_target: self.en_passant_target,
+            halfmove_clock: self.halfmove_clock,
+            fullmove_number: self.fullmove_number,
         }
     }
 

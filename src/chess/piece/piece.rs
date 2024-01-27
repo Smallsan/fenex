@@ -25,7 +25,7 @@ impl Color {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct CastlingRights {
     pub white_kingside: bool,
     pub white_queenside: bool,
