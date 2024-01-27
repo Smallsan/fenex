@@ -10,6 +10,12 @@ mod test {
         piece::piece::Color,
     };
 
+    /// Check and fix pawns?
+    /// Check if the new move gen is working.
+    /// Convert fen into boards.
+    /// Create something to visualize moves.
+    /// When pawns are moved they can no longer be moved?
+
     #[test]
     fn notation_and_coordinates() {
         // Creates a Notation from chars. ('file' 'rank').
@@ -41,12 +47,23 @@ mod test {
         let to = Coordinates::from_notation_string("e4").unwrap();
 
         // Moves a piece from one coordinate to another.
+        // Problem here
         one_dimensional_board.move_piece_with_coordinates(from, to);
 
         // Generates all possible movements for White.
-        let movement = one_dimensional_board.generate_moves(Color::White);
+        let movement = one_dimensional_board.generate_moves(Color::White, true);
 
         // Checks if the king is in check in the position.
         let is_in_check = one_dimensional_board.is_king_in_check(Color::White);
+
+        dbg!(&movement);
+
+        one_dimensional_board.print_board_with_labels();
+
+        let new_to = Coordinates::from_notation_string("e5").unwrap();
+
+        one_dimensional_board.move_piece_with_coordinates(to, new_to);
+
+        one_dimensional_board.print_board_with_labels();
     }
 }

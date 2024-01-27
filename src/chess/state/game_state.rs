@@ -1,4 +1,10 @@
-use crate::chess::{board::board::Board, piece::piece::Color};
+use crate::chess::{
+    board::{
+        board::{Board, BoardType},
+        coordinates::Coordinates,
+    },
+    piece::piece::{Color, PieceType},
+};
 
 pub enum GameState {
     Normal,
@@ -12,8 +18,8 @@ impl Board {
     pub fn game_state(&self, color: Color) -> GameState {
         let opponent_color = color.reverse();
 
-        let moves = self.generate_moves(color);
-        let opponent_moves = self.generate_moves(opponent_color);
+        let moves = self.generate_moves(color, true);
+        let opponent_moves = self.generate_moves(opponent_color, true);
 
         let moves_count = moves.len();
         let opponent_moves_count = opponent_moves.len();
@@ -40,11 +46,40 @@ impl Board {
 
     // Checks if the king is undercheck.
     pub fn is_king_in_check(&self, color: Color) -> bool {
-        let king_position = self.find_king(color);
+        let king_position = match self.find_king(color) {
+            Some(position) => position,
+            None => return false,
+        };
+
         let opponent_color = color.reverse();
-        let opponent_moves = self.generate_moves(opponent_color);
-        opponent_moves
-            .iter()
-            .any(|m| m.to() == king_position.expect("Couldn't find the king's position"))
+        let opponent_moves = self.generate_moves(opponent_color, false);
+        opponent_moves.iter().any(|m| m.to() == king_position)
+    }
+
+    /// finds the king piece in the board and returns it's coordinates.
+    pub fn find_king(&self, color: Color) -> Option<Coordinates> {
+        match &self.board_type {
+            BoardType::OneDimensional(board) => {
+                for i in 1..=64 {
+                    if let Some(piece) = board[i - 1] {
+                        if piece.color() == color && piece.piece_type() == PieceType::King {
+                            return Some(piece.coordinates());
+                        }
+                    }
+                }
+            }
+            BoardType::TwoDimensional(board) => {
+                for x in 1..=8 {
+                    for y in 1..=8 {
+                        if let Some(piece) = board[x - 1][y - 1] {
+                            if piece.color() == color && piece.piece_type() == PieceType::King {
+                                return Some(piece.coordinates());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        None
     }
 }

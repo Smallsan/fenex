@@ -51,7 +51,12 @@ pub trait ChessPiece {
     fn change_color(&mut self, color: Color);
     fn change_coordinates(&mut self, coordinates: Coordinates);
     fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str>;
-    fn is_valid_move(&mut self, coordinates: Coordinates, board: &Board) -> bool;
+    fn is_valid_move(
+        &mut self,
+        coordinates: Coordinates,
+        board: &Board,
+        filter_check: bool,
+    ) -> bool;
 }
 
 pub struct Castle {

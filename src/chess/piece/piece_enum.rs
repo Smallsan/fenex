@@ -51,14 +51,31 @@ impl ChessPieceEnum {
         }
     }
 
-    pub fn is_valid_move(&self, destination: Coordinates, board: &Board) -> bool {
+    pub fn is_valid_move(
+        &self,
+        destination: Coordinates,
+        board: &Board,
+        check_for_check: bool,
+    ) -> bool {
         match self {
-            ChessPieceEnum::Pawn(mut pawn) => pawn.is_valid_move(destination, &board),
-            ChessPieceEnum::Knight(mut knight) => knight.is_valid_move(destination, &board),
-            ChessPieceEnum::Bishop(mut bishop) => bishop.is_valid_move(destination, &board),
-            ChessPieceEnum::Rook(mut rook) => rook.is_valid_move(destination, &board),
-            ChessPieceEnum::Queen(mut queen) => queen.is_valid_move(destination, &board),
-            ChessPieceEnum::King(mut king) => king.is_valid_move(destination, &board),
+            ChessPieceEnum::Pawn(mut pawn) => {
+                pawn.is_valid_move(destination, &board, check_for_check)
+            }
+            ChessPieceEnum::Knight(mut knight) => {
+                knight.is_valid_move(destination, &board, check_for_check)
+            }
+            ChessPieceEnum::Bishop(mut bishop) => {
+                bishop.is_valid_move(destination, &board, check_for_check)
+            }
+            ChessPieceEnum::Rook(mut rook) => {
+                rook.is_valid_move(destination, &board, check_for_check)
+            }
+            ChessPieceEnum::Queen(mut queen) => {
+                queen.is_valid_move(destination, &board, check_for_check)
+            }
+            ChessPieceEnum::King(mut king) => {
+                king.is_valid_move(destination, &board, check_for_check)
+            }
         }
     }
 

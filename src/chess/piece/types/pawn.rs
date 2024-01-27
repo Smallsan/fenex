@@ -33,7 +33,7 @@ impl ChessPiece for Pawn {
     fn change_coordinates(&mut self, coordinates: Coordinates) {
         self.coordinates = coordinates;
     }
-    
+
     /// Returns the type of this piece (Pawn).
     fn piece_type(&self) -> PieceType {
         PieceType::Pawn
@@ -43,7 +43,7 @@ impl ChessPiece for Pawn {
     fn color(&self) -> Color {
         self.color
     }
-    
+
     /// Moves this piece to the given coordinates.
     ///
     /// If the move is not valid for this piece, returns an error.
@@ -57,17 +57,24 @@ impl ChessPiece for Pawn {
     }
 
     /// Returns whether this piece can move to the given coordinates.
-    fn is_valid_move(&mut self, destination: Coordinates, board: &Board) -> bool {
+    fn is_valid_move(
+        &mut self,
+        destination: Coordinates,
+        board: &Board,
+        filter_check: bool,
+    ) -> bool {
         // Create a copy of the board and apply the move.
-        let mut new_board = board.clone();
-        new_board.make_move_unchecked(Move::new(
-            self.coordinates(),
-            destination,
-            self.piece_type(),
-        ));
+        if filter_check {
+            let mut new_board = board.clone();
+            new_board.make_move_unchecked(Move::new(
+                self.coordinates(),
+                destination,
+                self.piece_type(),
+            ));
 
-        if new_board.is_king_in_check(self.color) {
-            return false;
+            if new_board.is_king_in_check(self.color) {
+                return false;
+            }
         }
 
         // Calculate the difference between the current and target coordinates.
@@ -75,7 +82,9 @@ impl ChessPiece for Pawn {
         let dy = (self.coordinates.y - destination.y).abs();
 
         // A pawn can move forward one square if that square is unoccupied.
-        if dx == 0 && dy == 1 {
+        if dx == 0
+            && ((self.color == Color::White && dy == -1) || (self.color == Color::Black && dy == 1))
+        {
             if board.get_piece(destination).is_none() {
                 self.has_moved = true;
                 return true;
@@ -83,7 +92,9 @@ impl ChessPiece for Pawn {
         }
 
         // A pawn can move forward diagonally one square to capture an opponent's piece.
-        if dx == 1 && dy == 1 {
+        if dx == 1
+            && ((self.color == Color::White && dy == -1) || (self.color == Color::Black && dy == 1))
+        {
             if let Some(piece) = board.get_piece(destination) {
                 if piece.color() != self.color {
                     self.has_moved = true;

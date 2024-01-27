@@ -247,7 +247,7 @@ impl Board {
         let piece = piece_enum.get_piece_as_mut();
 
         // Check if the move is valid.
-        if !piece.is_valid_move(to, self) {
+        if !piece.is_valid_move(to, self, true) {
             println!("invalid move");
             return Err("Invalid move");
         }
@@ -388,20 +388,5 @@ impl Board {
                 }
             }
         }
-    }
-
-    /// finds the king piece in the board and returns it's coordinates.
-    pub fn find_king(&self, color: Color) -> Option<Coordinates> {
-        for rank in 1..=8 {
-            for file in 1..=8 {
-                let coordinates = Coordinates::new(rank, file);
-                if let Some(piece) = self.get_piece(coordinates) {
-                    if piece.color() == color && piece.piece_type() == PieceType::King {
-                        return Some(coordinates);
-                    }
-                }
-            }
-        }
-        None
     }
 }

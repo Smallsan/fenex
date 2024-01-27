@@ -44,7 +44,7 @@ impl Board {
     /// Generates all possible moves for a chess color in the board.
     /// Doesn't check for pins and check situations yet
     /// Can't generate En passants and castles yet
-    pub fn generate_moves(&self, color: Color) -> Vec<Move> {
+    pub fn generate_moves(&self, color: Color, check_for_check: bool) -> Vec<Move> {
         let mut moves = Vec::new();
 
         match &self.board_type {
@@ -56,7 +56,7 @@ impl Board {
                                 for y_to in 1..=8 {
                                     let destination = Coordinates::new(x_to, y_to);
                                     let piece_type = piece.piece_type();
-                                    if piece.is_valid_move(destination, self) {
+                                    if piece.is_valid_move(destination, self, check_for_check) {
                                         moves.push(Move::new(
                                             piece.coordinates(),
                                             destination,
@@ -78,7 +78,7 @@ impl Board {
                                     for y_to in 1..=8 {
                                         let piece_type = piece.piece_type();
                                         let destination = Coordinates::new(x_to, y_to);
-                                        if piece.is_valid_move(destination, self) {
+                                        if piece.is_valid_move(destination, self, true) {
                                             moves.push(Move::new(
                                                 piece.coordinates(),
                                                 destination,

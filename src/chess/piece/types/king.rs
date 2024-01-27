@@ -48,24 +48,31 @@ impl ChessPiece for King {
     fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
         board.move_piece_with_coordinates(self.coordinates, destination)
     }
-    
+
     /// Returns the current location of this piece.
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
     /// Returns whether this piece can move to the given coordinates.
-    fn is_valid_move(&mut self, destination: Coordinates, board: &Board) -> bool {
+    fn is_valid_move(
+        &mut self,
+        destination: Coordinates,
+        board: &Board,
+        filter_check: bool,
+    ) -> bool {
         // Create a copy of the board and apply the move.
-        let mut new_board = board.clone();
-        new_board.make_move_unchecked(Move::new(
-            self.coordinates(),
-            destination,
-            self.piece_type(),
-        ));
+        if filter_check {
+            let mut new_board = board.clone();
+            new_board.make_move_unchecked(Move::new(
+                self.coordinates(),
+                destination,
+                self.piece_type(),
+            ));
 
-        if new_board.is_king_in_check(self.color) {
-            return false;
+            if new_board.is_king_in_check(self.color) {
+                return false;
+            }
         }
 
         // Calculate the difference between the current and target coordinates.
