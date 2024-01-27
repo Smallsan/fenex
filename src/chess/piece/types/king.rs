@@ -1,5 +1,7 @@
-use crate::chess::{board::{board::Board, coordinates::Coordinates}, piece::piece::{ChessPiece, Color, PieceType}};
-
+use crate::chess::{
+    board::{board::Board, coordinates::Coordinates},
+    piece::piece::{ChessPiece, Color, PieceType},
+};
 
 /// Represents a king in a game of chess.
 ///

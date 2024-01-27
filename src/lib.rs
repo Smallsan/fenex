@@ -3,12 +3,12 @@
 
 pub mod chess;
 
-
-
 #[cfg(test)]
 mod test {
-    use crate::chess::{board::{board::Board, coordinates::Coordinates, notation::Notation}, piece::piece::Color};
-
+    use crate::chess::{
+        board::{board::Board, coordinates::Coordinates, notation::Notation},
+        piece::piece::Color,
+    };
 
     #[test]
     fn notation_and_coordinates() {
@@ -48,9 +48,5 @@ mod test {
 
         // Checks if the king is in check in the position.
         let is_in_check = one_dimensional_board.is_king_in_check(Color::White);
-
-    
-    
-    
-     }
+    }
 }

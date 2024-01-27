@@ -1,7 +1,10 @@
-use crate::chess::piece::{piece::{CastlingRights, Color, PieceType}, piece_enum::ChessPieceEnum, types::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook}};
+use crate::chess::piece::{
+    piece::{CastlingRights, Color, PieceType},
+    piece_enum::ChessPieceEnum,
+    types::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook},
+};
 
 use super::{coordinates::Coordinates, notation::Notation};
-
 
 /// The BoardType represents the different types of chess boards.
 #[derive(Debug, PartialEq)]
@@ -35,7 +38,7 @@ impl Board {
             fullmove_number: 1,
         }
     }
-    
+
     /// Creates a new `2D Board` with all squares empty.
     pub fn new_two_dimensional() -> Self {
         Board {
@@ -205,12 +208,10 @@ impl Board {
     /// Gets the piece at the given coordinates.
     pub fn get_piece(&self, coordinates: Coordinates) -> Option<&ChessPieceEnum> {
         match &self.board_type {
-            BoardType::OneDimensional(board) => {
-                match coordinates.to_index() {
-                    Ok(index) if index < board.len() => board[index].as_ref(),
-                    _ => None,
-                }
-            }
+            BoardType::OneDimensional(board) => match coordinates.to_index() {
+                Ok(index) if index < board.len() => board[index].as_ref(),
+                _ => None,
+            },
             BoardType::TwoDimensional(board) => {
                 let x = (coordinates.x - 1) as usize;
                 let y = (coordinates.y - 1) as usize;
@@ -391,5 +392,4 @@ impl Board {
         }
         None
     }
-
 }

@@ -1,6 +1,5 @@
 use super::notation::Notation;
 
-
 /// Represents the coordinates on a chess board.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Coordinates {

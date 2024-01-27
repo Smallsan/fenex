@@ -1,5 +1,7 @@
-use crate::chess::{board::{board::Board, coordinates::Coordinates}, piece::piece::{ChessPiece, Color, PieceType}};
-
+use crate::chess::{
+    board::{board::Board, coordinates::Coordinates},
+    piece::piece::{ChessPiece, Color, PieceType},
+};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Pawn {

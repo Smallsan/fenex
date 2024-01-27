@@ -1,5 +1,4 @@
 extern crate fenex;
 
 #[test]
-fn main() {
-}
+fn main() {}

@@ -1,4 +1,3 @@
-
 /// Represents a FEN (Forsyth–Edwards Notation) chess position.
 
 #[derive(Debug)]
@@ -97,11 +96,7 @@ impl Fen {
         return result;
     }
 
-    pub fn to_two_dimensional_board() {
+    pub fn to_two_dimensional_board() {}
 
-    }
-
-    pub fn to_one_dimensional_board() {
-        
-    }
+    pub fn to_one_dimensional_board() {}
 }

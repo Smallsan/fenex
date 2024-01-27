@@ -1,6 +1,5 @@
 use crate::chess::{board::board::Board, piece::piece::Color};
 
-
 pub enum GameState {
     Normal,
     Check,
@@ -35,7 +34,7 @@ impl Board {
 
         GameState::Normal
     }
-    
+
     // Checks if the king is undercheck.
     pub fn is_king_in_check(&self, color: Color) -> bool {
         let king_position = self.find_king(color);
