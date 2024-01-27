@@ -43,5 +43,4 @@
 
 - Added fields to the board struct.
 - Heavy refactoring changed everything dhjfkghwhjfgwjhgf.
-- 
   

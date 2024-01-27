@@ -16,6 +16,10 @@ impl Coordinates {
         Coordinates { x, y }
     }
 
+    pub fn to_tuple(&self) -> (usize, usize) {
+        ((self.x) as usize, (self.y) as usize)
+    }
+
     /// Creates a `Coordinates` instance from a string representation.
     /// The string should be in the format "x,y".
     /// Returns `None` if the string is not a valid representation.
