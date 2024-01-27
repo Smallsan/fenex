@@ -4,6 +4,7 @@ use crate::chess::{
     state::movement::Move,
 };
 
+/// Represents a Knight chess piece.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Knight {
     pub color: Color,
@@ -11,10 +12,12 @@ pub struct Knight {
 }
 
 impl Knight {
+    /// Creates a new Knight with the specified color and coordinates.
     pub fn new(color: Color, coordinates: Coordinates) -> Knight {
         Knight { color, coordinates }
     }
 }
+
 impl ChessPiece for Knight {
     /// Changes the color of this piece.
     fn change_color(&mut self, color: Color) {
@@ -25,23 +28,30 @@ impl ChessPiece for Knight {
     fn change_coordinates(&mut self, coordinates: Coordinates) {
         self.coordinates = coordinates;
     }
-
+    
+    /// Returns the type of this piece (Knight).
     fn piece_type(&self) -> PieceType {
         PieceType::Knight
     }
 
+    /// Returns the color of this piece.
     fn color(&self) -> Color {
         self.color
     }
 
+    /// Moves this piece to the given coordinates.
+    ///
+    /// If the move is not valid for this piece, returns an error.
     fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
         board.move_piece_with_coordinates(self.coordinates, destination)
     }
 
+    /// Returns the current location of this piece.
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
+    /// Returns whether this piece can move to the given coordinates.
     fn is_valid_move(&mut self, destination: Coordinates, board: &Board) -> bool {
         // Create a copy of the board and apply the move.
         let mut new_board = board.clone();

@@ -4,13 +4,16 @@ use crate::chess::{
     state::movement::Move,
 };
 
+/// Represents a pawn in the game of chess.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Pawn {
     pub color: Color,
     pub coordinates: Coordinates,
     pub has_moved: bool,
 }
+
 impl Pawn {
+    /// Creates a new pawn with the specified color, coordinates, and move status.
     pub fn new(color: Color, coordinates: Coordinates, has_moved: bool) -> Pawn {
         Pawn {
             color,
@@ -19,6 +22,7 @@ impl Pawn {
         }
     }
 }
+
 impl ChessPiece for Pawn {
     /// Changes the color of this piece.
     fn change_color(&mut self, color: Color) {
@@ -29,23 +33,30 @@ impl ChessPiece for Pawn {
     fn change_coordinates(&mut self, coordinates: Coordinates) {
         self.coordinates = coordinates;
     }
-
+    
+    /// Returns the type of this piece (Pawn).
     fn piece_type(&self) -> PieceType {
         PieceType::Pawn
     }
 
+    /// Returns the color of this piece.
     fn color(&self) -> Color {
         self.color
     }
-
+    
+    /// Moves this piece to the given coordinates.
+    ///
+    /// If the move is not valid for this piece, returns an error.
     fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
         board.move_piece_with_coordinates(self.coordinates, destination)
     }
 
+    /// Returns the current location of this piece.
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
+    /// Returns whether this piece can move to the given coordinates.
     fn is_valid_move(&mut self, destination: Coordinates, board: &Board) -> bool {
         // Create a copy of the board and apply the move.
         let mut new_board = board.clone();

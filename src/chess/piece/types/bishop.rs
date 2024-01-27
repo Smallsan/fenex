@@ -5,8 +5,6 @@ use crate::chess::{
 };
 
 /// Represents a bishop in a game of chess.
-///
-/// A bishop can move any number of squares diagonally.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Bishop {
     /// The color of the bishop.

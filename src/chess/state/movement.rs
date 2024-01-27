@@ -6,6 +6,7 @@ use crate::chess::{
     piece::piece::{Color, PieceType},
 };
 
+/// Represents a move in the game of chess.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Move {
     piece_type: PieceType,
@@ -14,6 +15,7 @@ pub struct Move {
 }
 
 impl Move {
+    /// Creates a new move from the given coordinates.
     pub fn new(from: Coordinates, to: Coordinates, piece_type: PieceType) -> Self {
         Self {
             from,
@@ -22,14 +24,17 @@ impl Move {
         }
     }
 
+    /// Returns the coordinates of the piece that is being moved.
     pub fn from(&self) -> Coordinates {
         self.from
     }
 
+    /// Returns the coordinates of the destination of the piece.
     pub fn to(&self) -> Coordinates {
         self.to
     }
 
+    /// Returns the type of the piece that is being moved.
     pub fn piece_type(&self) -> PieceType {
         self.piece_type
     }

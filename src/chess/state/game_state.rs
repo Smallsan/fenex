@@ -20,14 +20,17 @@ impl Board {
 
         let is_king_in_check = self.is_king_in_check(color);
 
+        // If the king is in check and has no moves, it's checkmate.
         if is_king_in_check && moves_count == 0 {
             return GameState::Checkmate;
         }
 
+        // If the king is not in check and has no moves, it's stalemate.
         if !is_king_in_check && opponent_moves_count == 0 {
             return GameState::Stalemate;
         }
 
+        // If the king is in check and has moves, it's check.
         if is_king_in_check {
             return GameState::Check;
         }

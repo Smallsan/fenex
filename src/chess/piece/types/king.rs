@@ -4,9 +4,7 @@ use crate::chess::{
     state::movement::Move,
 };
 
-/// Represents a king in a game of chess.
-///
-/// A king can move one square in any direction.
+/// Represents a king in the game of chess.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct King {
     /// The color of the king.
@@ -50,11 +48,13 @@ impl ChessPiece for King {
     fn move_to(&self, destination: Coordinates, board: &mut Board) -> Result<(), &'static str> {
         board.move_piece_with_coordinates(self.coordinates, destination)
     }
-
+    
+    /// Returns the current location of this piece.
     fn coordinates(&self) -> Coordinates {
         self.coordinates
     }
 
+    /// Returns whether this piece can move to the given coordinates.
     fn is_valid_move(&mut self, destination: Coordinates, board: &Board) -> bool {
         // Create a copy of the board and apply the move.
         let mut new_board = board.clone();
