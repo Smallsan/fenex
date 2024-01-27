@@ -1,14 +1,8 @@
-use crate::{
-    bishop::Bishop,
-    chess_board::board::Board,
-    coordinates::Coordinates,
-    king::King,
-    knight::Knight,
-    pawn::Pawn,
-    piece::{ChessPiece, Color, PieceType},
-    queen::Queen,
-    rook::Rook,
-};
+use crate::chess::board::{board::Board, coordinates::Coordinates};
+
+use super::{piece::{ChessPiece, Color, PieceType}, types::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook}};
+
+
 
 // The ChessPieceEnum represents the different types of chess pieces.
 #[derive(Debug, Clone, Copy, PartialEq)]

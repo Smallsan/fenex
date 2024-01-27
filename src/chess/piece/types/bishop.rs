@@ -1,6 +1,6 @@
-use crate::chess_board::board::Board;
-use crate::chess_board::coordinates::Coordinates;
-use crate::chess_piece::piece::*;
+use crate::chess::{board::{board::Board, coordinates::Coordinates}, piece::piece::{ChessPiece, Color, PieceType}};
+
+
 
 /// Represents a bishop in a game of chess.
 ///

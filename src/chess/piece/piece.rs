@@ -1,4 +1,5 @@
-use crate::chess_board::{board::Board, coordinates::Coordinates};
+use crate::chess::board::{board::Board, coordinates::Coordinates};
+
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PieceType {

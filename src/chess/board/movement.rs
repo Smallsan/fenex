@@ -1,4 +1,8 @@
-use crate::{coordinates::Coordinates, piece::PieceType};
+use crate::chess::piece::piece::PieceType;
+
+use super::coordinates::Coordinates;
+
+
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Move {

@@ -1,5 +1,6 @@
-use crate::chess_board::coordinates::Coordinates;
 use std::convert::TryInto;
+
+use super::coordinates::Coordinates;
 
 /// Represents the notation of a position on a chess board.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

@@ -1,17 +1,14 @@
 #![cfg(not(doctest))]
 #![doc = include_str!("../README.md")]
 
-pub mod chess_board;
-pub mod chess_piece;
+pub mod chess;
 
-pub use chess_board::{coordinates, fen_notation, notation};
-pub use chess_piece::piece;
-pub use chess_piece::pieces::{bishop, king, knight, pawn, queen, rook};
+
 
 #[cfg(test)]
 mod test {
-    use crate::chess_piece::piece::Color;
-    use crate::{chess_board::board::Board, coordinates::Coordinates, notation::Notation};
+    use crate::chess::{board::{board::Board, coordinates::Coordinates, notation::Notation}, piece::piece::Color};
+
 
     #[test]
     fn notation_and_coordinates() {

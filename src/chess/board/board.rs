@@ -1,9 +1,7 @@
-use crate::chess_board::movement::Move;
-use crate::piece::{CastlingRights, PieceType};
-use crate::{
-    bishop::Bishop, chess_piece::piece_enum::ChessPieceEnum, coordinates::Coordinates, king::King,
-    knight::Knight, notation::Notation, pawn::Pawn, piece::Color, queen::Queen, rook::Rook,
-};
+use crate::chess::piece::{piece::{CastlingRights, Color, PieceType}, piece_enum::ChessPieceEnum, types::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook}};
+
+use super::{coordinates::Coordinates, movement::Move, notation::Notation};
+
 
 /// The BoardType represents the different types of chess boards.
 #[derive(Debug, PartialEq)]
@@ -432,6 +430,58 @@ impl Board {
         moves
     }
 
+    /// Generates all possible moves for chess pieces of a color in the board.
+    pub fn generate_moves_for_piece_type(&self, color: Color, piece_type: PieceType) -> Vec<Move> {
+        let mut moves = Vec::new();
+
+        match &self.board_type {
+            BoardType::OneDimensional(board) => {
+                for i in 1..=64 {
+                    if let Some(piece) = board[i - 1] {
+                        if piece.color() == color && piece.piece_type() == piece_type {
+                            for x_to in 1..=8 {
+                                for y_to in 1..=8 {
+                                    let destination = Coordinates::new(x_to, y_to);
+                                    if piece.is_valid_move(destination, self) {
+                                        moves.push(Move::new(
+                                            piece.coordinates(),
+                                            destination,
+                                            piece_type,
+                                        ));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            BoardType::TwoDimensional(board) => {
+                for x_from in 1..=8 {
+                    for y_from in 1..=8 {
+                        if let Some(piece) = board[x_from - 1][y_from - 1] {
+                            if piece.color() == color && piece.piece_type() == piece_type {
+                                for x_to in 1..=8 {
+                                    for y_to in 1..=8 {
+                                        let destination = Coordinates::new(x_to, y_to);
+                                        if piece.is_valid_move(destination, self) {
+                                            moves.push(Move::new(
+                                                piece.coordinates(),
+                                                destination,
+                                                piece_type,
+                                            ));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        moves
+    }
+
     // Checks if the king is undercheck.
     pub fn is_king_in_check(&self, color: Color) -> bool {
         let king_position = self.find_king(color);
@@ -443,7 +493,7 @@ impl Board {
     }
 
     /// finds the king piece in the board and returns it's coordinates.
-    fn find_king(&self, color: Color) -> Option<Coordinates> {
+    pub fn find_king(&self, color: Color) -> Option<Coordinates> {
         for rank in 1..=8 {
             for file in 1..=8 {
                 let coordinates = Coordinates::new(rank, file);
@@ -456,4 +506,5 @@ impl Board {
         }
         None
     }
+
 }
