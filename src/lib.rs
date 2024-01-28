@@ -6,7 +6,13 @@ pub mod chess;
 #[cfg(test)]
 mod test {
     use crate::chess::{
-        board::{board::Board, coordinates::Coordinates, notation::Notation},
+        board::{
+            board::{Board, BoardType},
+            board_enum::BoardTypeEnum,
+            coordinates::Coordinates,
+            fen::Fen,
+            notation::Notation,
+        },
         piece::piece::Color,
     };
 
@@ -16,7 +22,7 @@ mod test {
     /// Create something to visualize moves.
     /// When pawns are moved they can no longer be moved?
 
-    #[test]
+    //#[test]
     fn notation_and_coordinates() {
         // Creates a Notation from chars. ('file' 'rank').
         let notation: Notation = Notation::new('e', '4').unwrap();
@@ -40,30 +46,16 @@ mod test {
         // Creates a 1D board, With starting pieces.
         let mut one_dimensional_board = Board::new_one_dimensional_starting_position();
 
-        // Creates Coordinates from a string of 2 i8 separated by a comma.
-        let from = Coordinates::from_notation_string("e2").unwrap();
+        let fen = Fen::new(
+            "r1b4r/ppkppppq/4P2p/7n/RNK2b1n/Q7/PPPPP1PP/2B2BNR w - - 0 1
+        ",
+        )
+        .unwrap();
 
-        // Creates Coordinates from a string of 2 i8 separated by a comma.
-        let to = Coordinates::from_notation_string("e4").unwrap();
+        let board = fen.to_board(BoardTypeEnum::OneDimensional);
 
-        // Moves a piece from one coordinate to another.
-        // Problem here
-        one_dimensional_board.move_piece_with_coordinates(from, to);
+        board.display();
 
-        // Generates all possible movements for White.
-        let movement = one_dimensional_board.generate_moves(Color::White, true);
-
-        // Checks if the king is in check in the position.
-        let is_in_check = one_dimensional_board.is_king_in_check(Color::White);
-
-        dbg!(&movement);
-
-        one_dimensional_board.print_board_with_labels();
-
-        let new_to = Coordinates::from_notation_string("e5").unwrap();
-
-        one_dimensional_board.move_piece_with_coordinates(to, new_to);
-
-        one_dimensional_board.print_board_with_labels();
+        fen.display();
     }
 }

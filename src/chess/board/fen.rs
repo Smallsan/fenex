@@ -1,3 +1,15 @@
+use crate::chess::piece::{
+    piece::Color,
+    piece_enum::ChessPieceEnum,
+    types::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook},
+};
+
+use super::{
+    board::{Board, BoardType},
+    board_enum::BoardTypeEnum,
+    coordinates::Coordinates,
+};
+
 /// Represents a FEN (Forsyth–Edwards Notation) chess position.
 
 #[derive(Debug)]
@@ -64,39 +76,70 @@ impl Fen {
 
     /// Prints the board representation of the `Fen` instance.
     pub fn display(&self) {
-        println!("{}", self.to_string())
+        Fen::to_board(&self, BoardTypeEnum::OneDimensional).display();
     }
 
-    /// Converts the board position to a string representation.
-    ///
-    /// # Returns
-    ///
-    /// * `String` - The string representation of the board position.
-    pub fn to_string(&self) -> String {
-        let mut result = String::new();
+    pub fn to_board(&self, board_type: BoardTypeEnum) -> Board {
+        let mut board = match board_type {
+            BoardTypeEnum::OneDimensional => Board::new_one_dimensional(),
+            BoardTypeEnum::TwoDimensional => Board::new_two_dimensional(),
+        };
 
         let rows: Vec<&str> = self.board.split('/').collect();
-
-        for row in rows.iter().rev() {
+        for (i, row) in rows.iter().rev().enumerate() {
+            let mut j = 0;
             for square in row.chars() {
                 match square {
                     '1'..='8' => {
                         let num_empty: usize = square.to_digit(10).unwrap() as usize;
-                        result.push_str(&format!("{} ", "{ } ".repeat(num_empty)));
+                        j += num_empty;
                     }
-                    piece @ ('P' | 'N' | 'B' | 'R' | 'Q' | 'K' | 'p' | 'n' | 'b' | 'r' | 'q'
-                    | 'k') => {
-                        result.push_str(&format!("{{{}}} ", piece));
+                    piece => {
+                        let color = if piece.is_uppercase() {
+                            Color::White
+                        } else {
+                            Color::Black
+                        };
+                        let piece_type = match piece.to_ascii_lowercase() {
+                            'p' => ChessPieceEnum::Pawn(Pawn::new(
+                                color,
+                                Coordinates::from_index(j + i * 8),
+                                false,
+                            )),
+                            'n' => ChessPieceEnum::Knight(Knight::new(
+                                color,
+                                Coordinates::from_index(j + i * 8),
+                            )),
+                            'b' => ChessPieceEnum::Bishop(Bishop::new(
+                                color,
+                                Coordinates::from_index(j + i * 8),
+                            )),
+                            'r' => ChessPieceEnum::Rook(Rook::new(
+                                color,
+                                Coordinates::from_index(j + i * 8),
+                            )),
+                            'q' => ChessPieceEnum::Queen(Queen::new(
+                                color,
+                                Coordinates::from_index(j + i * 8),
+                            )),
+                            'k' => ChessPieceEnum::King(King::new(
+                                color,
+                                Coordinates::from_index(j + i * 8),
+                            )),
+                            _ => unreachable!(),
+                        };
+                        match board.board_type {
+                            BoardType::OneDimensional(ref mut b) => b[j + i * 8] = Some(piece_type),
+                            BoardType::TwoDimensional(ref mut b) => b[i][j] = Some(piece_type),
+                        }
+                        j += 1;
                     }
-                    _ => unreachable!(),
                 }
             }
-            result.push('\n');
         }
-        return result;
+
+        // TODO: Set the other fields of the board based on the Fen object
+
+        board
     }
-
-    pub fn to_two_dimensional_board() {}
-
-    pub fn to_one_dimensional_board() {}
 }
