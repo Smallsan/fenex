@@ -27,20 +27,37 @@ impl Color {
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct CastlingRights {
-    pub white_kingside: bool,
-    pub white_queenside: bool,
-    pub black_kingside: bool,
-    pub black_queenside: bool,
+    pub white_king_side: bool,
+    pub white_queen_side: bool,
+    pub black_king_side: bool,
+    pub black_queen_side: bool,
 }
 
 impl Default for CastlingRights {
     fn default() -> Self {
         Self {
-            white_kingside: true,
-            white_queenside: true,
-            black_kingside: true,
-            black_queenside: true,
+            white_king_side: true,
+            white_queen_side: true,
+            black_king_side: true,
+            black_queen_side: true,
         }
+    }
+}
+
+impl CastlingRights {
+    pub fn from_str(castle: &str) -> CastlingRights{
+        let white_king_side = castle.contains('K');
+        let white_queen_side = castle.contains('Q');
+        let black_king_side = castle.contains('k');
+        let black_queen_side = castle.contains('q');
+
+        CastlingRights{
+            white_king_side,
+            white_queen_side,
+            black_king_side,
+            black_queen_side
+        }
+
     }
 }
 
@@ -57,33 +74,4 @@ pub trait ChessPiece {
         board: &Board,
         filter_check: bool,
     ) -> bool;
-}
-
-pub struct Castle {
-    white_castle_king_side: bool,
-    white_castle_queen_side: bool,
-    black_castle_king_side: bool,
-    black_castle_queen_side: bool,
-}
-
-impl Castle {
-    pub fn new(
-        white_castle_king_side: bool,
-        white_castle_queen_side: bool,
-        black_castle_king_side: bool,
-        black_castle_queen_side: bool,
-    ) -> Castle {
-        Castle {
-            white_castle_king_side,
-            white_castle_queen_side,
-            black_castle_king_side,
-            black_castle_queen_side,
-        }
-    }
-    pub fn reset(&mut self) {
-        self.white_castle_king_side = false;
-        self.white_castle_queen_side = false;
-        self.black_castle_king_side = false;
-        self.black_castle_queen_side = false;
-    }
 }

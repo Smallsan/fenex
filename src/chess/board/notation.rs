@@ -24,11 +24,11 @@ impl Notation {
         Ok(Notation { file, rank })
     }
 
-    /// Creates a `Notation` instance from a string representation of coordinates.
-    pub fn from_coordinates_string(input: &str) -> Result<Notation, &'static str> {
-        let coordinates = Coordinates::from_string(input)?;
-        Notation::from_coordinates(coordinates)
-    }
+/// Creates a `Notation` instance from a string representation of coordinates.
+pub fn from_coordinates_string(input: &str) -> Option<Notation> {
+    let coordinates = Coordinates::from_string(input)?;
+    Notation::from_coordinates(coordinates).ok()
+}
 
     /// Creates a `Notation` instance from a `Coordinates` instance.
     pub fn from_coordinates(coordinates: Coordinates) -> Result<Notation, &'static str> {

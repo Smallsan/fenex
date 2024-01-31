@@ -9,6 +9,7 @@ pub struct Coordinates {
     pub y: i8,
 }
 
+
 impl Coordinates {
     /// Creates a new `Coordinates` instance.
     pub fn new(x: i8, y: i8) -> Coordinates {
@@ -22,23 +23,17 @@ impl Coordinates {
     /// Creates a `Coordinates` instance from a string representation.
     /// The string should be in the format "x,y".
     /// Returns `None` if the string is not a valid representation.
-    pub fn from_string(input: &str) -> Result<Coordinates, &'static str> {
+    pub fn from_string(input: &str) -> Option<Coordinates> {
         let parts: Vec<&str> = input.split(',').collect();
         if parts.len() != 2 {
-            return Err("Input should be in the format 'x,y'");
+            return None;
         }
-        let x = parts[0]
-            .trim()
-            .parse::<i8>()
-            .map_err(|_| "Invalid x coordinate")?;
-        let y = parts[1]
-            .trim()
-            .parse::<i8>()
-            .map_err(|_| "Invalid y coordinate")?;
+        let x = parts[0].trim().parse::<i8>().ok()?;
+        let y = parts[1].trim().parse::<i8>().ok()?;
         if x < 1 || x > 8 || y < 1 || y > 8 {
-            return Err("Coordinates should be between 1 and 8");
+            return None;
         }
-        Ok(Coordinates::new(x, y))
+        Some(Coordinates::new(x, y))
     }
 
     /// Creates a `Coordinates` instance from a string representation of notations.
