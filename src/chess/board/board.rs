@@ -239,4 +239,6 @@ impl Board {
         // Print file labels
         println!("   a  b  c  d  e  f  g  h");
     }
+
+    
 }
