@@ -76,7 +76,31 @@ impl Fen {
 
     /// Prints the board representation of the `Fen` instance.
     pub fn display(&self) {
-        Fen::to_board(&self, BoardTypeEnum::OneDimensional).display();
+        let rows: Vec<&str> = self.board.split('/').collect();
+
+        for (i, row) in rows.iter().enumerate() {
+            let mut line = String::new();
+            for c in row.chars() {
+                match c {
+                    '1'..='8' => {
+                        let num = c.to_digit(10).unwrap();
+                        for _ in 0..num {
+                            line.push_str("[ ]");
+                        }
+                    }
+                    _ => line.push_str(&format!("[{}]", c)),
+                }
+            }
+            println!("{} {}", 8-i, line);
+        }
+        println!("   a  b  c  d  e  f  g  h");
+
+        let turn = match self.turn.as_deref() {
+            Some("w") => "White's turn",
+            Some("b") => "Black's turn",
+            _ => "Unknown",
+        };
+        println!("{}", turn);
     }
 
     pub fn to_board(&self, board_type: BoardTypeEnum) -> Board {
