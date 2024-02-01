@@ -1,5 +1,5 @@
 use crate::chess::piece::{
-    piece::{CastlingRights, Color},
+    piece::Color,
     piece_enum::ChessPieceEnum,
     types::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook},
 };
@@ -17,8 +17,8 @@ use super::{
 pub struct Fen {
     board: String,
     turn: Option<String>,
-    castling: Option<CastlingRights>,
-    en_passant: Option<Coordinates>,
+    castling: Option<String>,
+    en_passant: Option<String>,
     halfmove_clock: Option<u32>,
     fullmove_number: Option<u32>,
 }
@@ -52,8 +52,8 @@ impl Fen {
         for (i, &part) in parts.iter().skip(1).enumerate() {
             match i {
                 0 => fen.turn = Some(String::from(part)),
-                1 => fen.castling = Some(CastlingRights::from_str(&String::from(part))),
-                2 => fen.en_passant = Coordinates::from_string(&String::from(part)),
+                1 => fen.castling = Some(String::from(part)),
+                2 => fen.en_passant = Some(String::from(part)),
                 3 => fen.halfmove_clock = Some(part.parse().unwrap_or_default()),
                 4 => fen.fullmove_number = Some(part.parse().unwrap_or_default()),
                 _ => return Err("Invalid FEN string"),
@@ -65,10 +65,10 @@ impl Fen {
     /// Prints the debug information of the `Fen` instance.
     pub fn debug(&self) {
         println!(
-            "Turn: {}\nCastling: {:?}\nEn Passant: {:?}\nHalfmove Clock: {}\nFullmove Number: {}",
+            "Turn: {}\nCastling: {}\nEn Passant: {}\nHalfmove Clock: {}\nFullmove Number: {}",
             self.turn.as_deref().unwrap_or("-"),
-            self.castling.unwrap_or_default(),
-            self.en_passant.map_or("-".to_string(), |coords| coords.to_string()),
+            self.castling.as_deref().unwrap_or("-"),
+            self.en_passant.as_deref().unwrap_or("-"),
             self.halfmove_clock.unwrap_or_default(),
             self.fullmove_number.unwrap_or_default(),
         );
@@ -137,22 +137,9 @@ impl Fen {
                 }
             }
         }
-        board.color_to_move = match self.turn.as_deref() {
-            Some("w") => Color::White,
-            Some("b") => Color::Black,
-            _ => panic!("Invalid turn in FEN"),
-        };
-        board.is_in_check = false; // This information is not available in FEN
-        board.castling_rights = self.castling;
-        board.en_passant_target = self.en_passant;
-        board.halfmove_clock = Some(self.halfmove_clock.unwrap_or(0));
-        board.fullmove_number = Some(self.fullmove_number.unwrap_or(1));
-    
-        // Check if the king is in check
-        if board.is_king_in_check(board.color_to_move) {
-            board.is_in_check = true;
-        }
-    
+
+        // TODO: Set the other fields of the board based on the Fen object
+
         board
     }
 }

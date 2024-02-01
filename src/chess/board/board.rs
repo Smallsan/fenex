@@ -1,6 +1,7 @@
 use crate::chess::piece::{
-    piece::{CastlingRights, Color},
+    piece::{CastlingRights, Color, PieceType},
     piece_enum::ChessPieceEnum,
+    types::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook},
 };
 
 use super::{board_enum::BoardTypeEnum, coordinates::Coordinates, fen::Fen, notation::Notation};
@@ -18,10 +19,10 @@ pub struct Board {
     pub board_type: BoardType,
     pub color_to_move: Color,
     pub is_in_check: bool,
-    pub castling_rights: Option<CastlingRights>,
+    pub castling_rights: CastlingRights,
     pub en_passant_target: Option<Coordinates>,
-    pub halfmove_clock: Option<u32>,
-    pub fullmove_number: Option<u32>,
+    pub halfmove_clock: u32,
+    pub fullmove_number: u32,
 }
 
 impl Board {
@@ -31,10 +32,10 @@ impl Board {
             board_type: BoardType::OneDimensional(vec![None; 64]),
             color_to_move: Color::White,
             is_in_check: false,
-            castling_rights: Some(CastlingRights::default()),
+            castling_rights: CastlingRights::default(),
             en_passant_target: None,
-            halfmove_clock: Some(0),
-            fullmove_number: Some(1),
+            halfmove_clock: 0,
+            fullmove_number: 1,
         }
     }
 
@@ -56,10 +57,10 @@ impl Board {
             board_type: BoardType::TwoDimensional([[None; 8]; 8]),
             color_to_move: Color::White,
             is_in_check: false,
-            castling_rights: Some(CastlingRights::default()),
+            castling_rights: CastlingRights::default(),
             en_passant_target: None,
-            halfmove_clock: Some(0),
-            fullmove_number: Some(1),
+            halfmove_clock: 0,
+            fullmove_number: 1,
         }
     }
 

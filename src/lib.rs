@@ -5,16 +5,18 @@ pub mod chess;
 
 #[cfg(test)]
 mod test {
-    use crate::chess::
+    use crate::chess::{
         board::{
-            board::Board,
+            board::{Board, BoardType},
             board_enum::BoardTypeEnum,
             coordinates::Coordinates,
             fen::Fen,
             notation::Notation,
-        }
-    ;
+        },
+        piece::piece::Color,
+    };
 
+    /// Check and fix pawns?
     /// Check if the new move gen is working.
     /// Convert fen into boards.
     /// Create something to visualize moves.
