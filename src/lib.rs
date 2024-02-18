@@ -15,6 +15,7 @@ mod test {
         },
         piece::piece::Color,
     };
+    
 
     /// Check and fix pawns?
     /// Check if the new move gen is working.

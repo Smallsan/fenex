@@ -15,8 +15,18 @@ impl Coordinates {
         Coordinates { x, y }
     }
 
+    // Returns the coordinates as a tuple.
     pub fn to_tuple(&self) -> (usize, usize) {
         ((self.x) as usize, (self.y) as usize)
+    }
+
+    
+    pub fn to_file(&self) -> char {
+        (self.x as u8 + b'a' - 1) as char
+    }
+
+    pub fn to_rank(&self) -> char {
+        (self.y as u8 + b'1' - 1) as char
     }
 
     /// Creates a `Coordinates` instance from a string representation.

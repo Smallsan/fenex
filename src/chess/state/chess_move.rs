@@ -8,13 +8,13 @@ use crate::chess::{
 
 /// Represents a move in the game of chess.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Move {
+pub struct ChessMove {
     piece_type: PieceType,
     from: Coordinates,
     to: Coordinates,
 }
 
-impl Move {
+impl ChessMove {
     /// Creates a new move from the given coordinates.
     pub fn new(from: Coordinates, to: Coordinates, piece_type: PieceType) -> Self {
         Self {
@@ -24,6 +24,64 @@ impl Move {
         }
     }
 
+    pub fn to_san(&self, board: &Board) -> String {
+        let mut san = String::new();
+        let from = self.from;
+        let to = self.to;
+        let piece = self.piece_type;
+    
+        match piece {
+            PieceType::Pawn => {
+                if let Some(_) = board.get_piece(to) {
+                    san.push(from.to_file());
+                    san.push('x');
+                }
+                san.push_str(&to.to_string());
+            },
+            PieceType::Knight => {
+                san.push('N');
+                if let Some(_) = board.get_piece(to) {
+                    san.push(from.to_file());
+                    san.push('x');
+                }
+                san.push_str(&to.to_string());
+            },
+            PieceType::Bishop => {
+                san.push('B');
+                if let Some(_) = board.get_piece(to) {
+                    san.push(from.to_file());
+                    san.push('x');
+                }
+                san.push_str(&to.to_string());
+            },
+            PieceType::Rook => {
+                san.push('R');
+                if let Some(_) = board.get_piece(to) {
+                    san.push(from.to_file());
+                    san.push('x');
+                }
+                san.push_str(&to.to_string());
+            },
+            PieceType::Queen => {
+                san.push('Q');
+                if let Some(_) = board.get_piece(to) {
+                    san.push(from.to_file());
+                    san.push('x');
+                }
+                san.push_str(&to.to_string());
+            },
+            PieceType::King => {
+                san.push('K');
+                if let Some(_) = board.get_piece(to) {
+                    san.push(from.to_file());
+                    san.push('x');
+                }
+                san.push_str(&to.to_string());
+            },
+        }
+    
+        san
+    }
     /// Returns the coordinates of the piece that is being moved.
     pub fn from(&self) -> Coordinates {
         self.from
@@ -44,7 +102,7 @@ impl Board {
     /// Generates all possible moves for a chess color in the board.
     /// Doesn't check for pins and check situations yet
     /// Can't generate En passants and castles yet
-    pub fn generate_moves(&self, color: Color, check_for_check: bool) -> Vec<Move> {
+    pub fn generate_moves(&self, color: Color, check_for_check: bool) -> Vec<ChessMove> {
         let mut moves = Vec::new();
 
         match &self.board_type {
@@ -57,7 +115,7 @@ impl Board {
                                     let destination = Coordinates::new(x_to, y_to);
                                     let piece_type = piece.piece_type();
                                     if piece.is_valid_move(destination, self, check_for_check) {
-                                        moves.push(Move::new(
+                                        moves.push(ChessMove::new(
                                             piece.coordinates(),
                                             destination,
                                             piece_type,
@@ -79,7 +137,7 @@ impl Board {
                                         let piece_type = piece.piece_type();
                                         let destination = Coordinates::new(x_to, y_to);
                                         if piece.is_valid_move(destination, self, true) {
-                                            moves.push(Move::new(
+                                            moves.push(ChessMove::new(
                                                 piece.coordinates(),
                                                 destination,
                                                 piece_type,
@@ -97,7 +155,7 @@ impl Board {
         moves
     }
     /// Makes a move in the board, Without considering legality.
-    pub fn make_move_unchecked(&mut self, m: Move) {
+    pub fn make_move_unchecked(&mut self, m: ChessMove) {
         match &mut self.board_type {
             BoardType::OneDimensional(board) => {
                 let from_index = m.from.to_index().expect("Invalid from coordinates");
@@ -110,5 +168,13 @@ impl Board {
                 board[to_x][to_y] = board[from_x][from_y].take();
             }
         }
+    }
+    
+    pub fn make_move_unchecked_new(&self, m: ChessMove) -> Board {
+        let mut cloned_board = self.clone();
+    
+        cloned_board.make_move_unchecked(m);
+    
+        cloned_board
     }
 }

@@ -1,8 +1,7 @@
 use crate::chess::{
     board::{board::Board, coordinates::Coordinates},
     piece::piece::{ChessPiece, Color, PieceType},
-    state::movement::Move,
-};
+    state::chess_move::ChessMove,};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Queen {
@@ -59,7 +58,7 @@ impl ChessPiece for Queen {
         // Create a copy of the board and apply the move.
         if filter_check {
             let mut new_board = board.clone();
-            new_board.make_move_unchecked(Move::new(
+            new_board.make_move_unchecked(ChessMove::new(
                 self.coordinates(),
                 destination,
                 self.piece_type(),
