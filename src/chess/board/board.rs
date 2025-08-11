@@ -119,10 +119,7 @@ impl Board {
                             let moving_piece = clone.get(from);
                             clone.set(from, None);
                             clone.set(to, moving_piece);
-                            clone.color_to_move = match clone.color_to_move {
-                                Color::White => Color::Black,
-                                Color::Black => Color::White,
-                            };
+                            // DON'T switch color_to_move - we want to check if OUR king is still safe
                             if !clone.is_in_check() {
                                 legal_moves.push((from, to));
                             }

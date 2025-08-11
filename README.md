@@ -7,7 +7,7 @@ A fast and reliable chess engine in Rust with full rule implementation and FEN s
 Add to your `Cargo.toml`:
 ```toml
 [dependencies]
-fenex = "0.1.6"
+fenex = "0.1.7"
 ```
 
 ## Basic Usage
