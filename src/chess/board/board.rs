@@ -114,6 +114,13 @@ impl Board {
                     if piece.color == self.color_to_move {
                         let pseudo_moves = self.generate_piece_moves(from, piece);
                         for to in pseudo_moves {
+                            // Check if this move would capture the enemy king (ILLEGAL)
+                            if let Some(target_piece) = self.get(to) {
+                                if target_piece.piece_type == PieceType::King {
+                                    continue; // Skip moves that capture the king
+                                }
+                            }
+                            
                             let mut clone = self.clone();
                             
                             // Properly simulate the move including special rules
@@ -162,7 +169,7 @@ impl Board {
                                     }
                                 }
                                 
-                                // DON'T switch color_to_move - we want to check if OUR king is still safe
+                                // Check if our own king is still safe (DON'T switch color_to_move)
                                 if !clone.is_in_check() {
                                     legal_moves.push((from, to));
                                 }

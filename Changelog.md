@@ -77,3 +77,7 @@
 ## Fenex v0.1.8 (8/11/2025)
 
 - Fixed so much bugs and forgotten implementations
+
+## Fenex v0.1.9 (8/12/2025)
+
+- Huge bug regarding legal move generation preventing giving checks.

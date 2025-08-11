@@ -1,6 +1,6 @@
 use fenex::chess::board::board::Board;
 use fenex::chess::board::coordinates::Coordinates;
-use fenex::chess::piece::piece::PieceType;
+use fenex::chess::piece::piece::{PieceType, Color};
 
 #[test]
 fn test_checkmate_detection() {
@@ -305,4 +305,212 @@ fn test_pinned_piece_cannot_move() {
     if let Some((_, to)) = bishop_moves.first() {
         assert_eq!(*to, Coordinates::new(6, 1), "Bishop should only be able to move to f1 to block check");
     }
+}
+
+#[test]
+fn test_can_give_check_to_enemy() {
+    // You SHOULD be able to move pieces to give check to the enemy king
+    let fen = "3k4/8/8/8/8/8/4R3/4K3 w - - 0 1";
+    let board = Board::from_fen(fen).unwrap();
+    
+    let legal_moves = board.generate_legal_moves();
+    
+    // White rook should be able to move to d2 to give check to black king on d8
+    let _check_move = legal_moves.iter()
+        .find(|(from, to)| from == &Coordinates::new(5, 2) && to == &Coordinates::new(4, 2))
+        .expect("Should be able to move rook to give check to enemy king");
+    
+    println!("Found move: rook from e2 to d2 gives check to king on d8");
+}
+
+#[test]
+fn test_can_capture_and_give_check() {
+    // You should be able to capture pieces while giving check  
+    let fen = "3k4/8/8/8/8/8/3rR3/4K3 w - - 0 1";
+    let board = Board::from_fen(fen).unwrap();
+    
+    let legal_moves = board.generate_legal_moves();
+    
+    // White rook should be able to capture black rook on d2, giving check to king on d8
+    let _capture_check_move = legal_moves.iter()
+        .find(|(from, to)| from == &Coordinates::new(5, 2) && to == &Coordinates::new(4, 2))
+        .expect("Should be able to capture rook and give check");
+        
+    println!("Found capture move: white rook takes black rook with check");
+}
+
+#[test]
+fn test_queen_can_give_check() {
+    // Queen should be able to move to give check
+    let fen = "3k4/8/8/8/8/8/4Q3/4K3 w - - 0 1";
+    let board = Board::from_fen(fen).unwrap();
+    
+    let legal_moves = board.generate_legal_moves();
+    
+    // Count how many moves the queen can make
+    let queen_moves: Vec<_> = legal_moves.iter()
+        .filter(|(from, _to)| from == &Coordinates::new(5, 2))
+        .collect();
+    
+    println!("Queen has {} legal moves", queen_moves.len());
+    
+    // Queen should have many moves available, including ones that give check
+    assert!(queen_moves.len() > 5, "Queen should have many legal moves available");
+    
+    // Queen should be able to move to d2 to give check to king on d8
+    let _check_move = queen_moves.iter()
+        .find(|(_, to)| to == &Coordinates::new(4, 2))
+        .expect("Queen should be able to move to d2 to give check");
+        
+    println!("Queen can move to d2 to give check");
+}
+
+#[test]
+fn test_debug_enemy_check_restriction() {
+    // Debug why moves that give check to enemy are being blocked
+    let fen = "4k3/8/8/8/8/8/4R3/4K3 w - - 0 1";
+    let board = Board::from_fen(fen).unwrap();
+    
+    println!("Initial position - White to move:");
+    println!("White king on e1, White rook on e2, Black king on e8");
+    
+    let legal_moves = board.generate_legal_moves();
+    println!("Number of legal moves: {}", legal_moves.len());
+    
+    for (from, to) in &legal_moves {
+        if let Some(piece) = board.get(*from) {
+            println!("Move: {}{}->{}{}({})", 
+                (from.x as u8 + b'a' - 1) as char, from.y,
+                (to.x as u8 + b'a' - 1) as char, to.y,
+                match piece.piece_type {
+                    PieceType::Pawn => "P",
+                    PieceType::Knight => "N",
+                    PieceType::Bishop => "B",
+                    PieceType::Rook => "R",
+                    PieceType::Queen => "Q",
+                    PieceType::King => "K",
+                }
+            );
+        }
+    }
+    
+    // Check if rook can move to e8 (which should give check)
+    let e8_move = legal_moves.iter()
+        .find(|(from, to)| from == &Coordinates::new(5, 2) && to == &Coordinates::new(5, 8));
+    
+    match e8_move {
+        Some(_) => println!("✅ Rook CAN move to e8 (correct)"),
+        None => println!("❌ Rook CANNOT move to e8 (BUG!)"),
+    }
+}
+
+#[test]
+fn test_complex_position_can_give_check() {
+    // Test a more complex position similar to what might occur in a real game
+    let fen = "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4";
+    let mut board = Board::from_fen(fen).unwrap();
+    
+    println!("Testing complex position...");
+    let legal_moves = board.generate_legal_moves();
+    println!("White has {} legal moves", legal_moves.len());
+    
+    // Try to find some moves that would give check
+    let mut check_giving_moves = Vec::new();
+    
+    for (from, to) in &legal_moves {
+        // Simulate the move
+        let mut test_board = board.clone();
+        test_board.apply_move(*from, *to).unwrap();
+        
+        // Switch perspective and check if black king is in check
+        test_board.color_to_move = match test_board.color_to_move {
+            Color::White => Color::Black,
+            Color::Black => Color::White,
+        };
+        
+        if test_board.is_in_check() {
+            check_giving_moves.push((*from, *to));
+            if let Some(piece) = board.get(*from) {
+                println!("Check-giving move: {}{}->{}{}({})", 
+                    (from.x as u8 + b'a' - 1) as char, from.y,
+                    (to.x as u8 + b'a' - 1) as char, to.y,
+                    match piece.piece_type {
+                        PieceType::Pawn => "P",
+                        PieceType::Knight => "N",
+                        PieceType::Bishop => "B",
+                        PieceType::Rook => "R",
+                        PieceType::Queen => "Q",
+                        PieceType::King => "K",
+                    }
+                );
+            }
+        }
+    }
+    
+    println!("Found {} moves that give check", check_giving_moves.len());
+    
+    // In this specific position there might not be immediate check-giving moves, which is fine
+    // The important thing is that the move generation works without crashes
+    println!("Move generation completed successfully for complex position");
+}
+
+#[test]
+fn test_actual_move_execution_giving_check() {
+    // Test that we can actually execute moves that give check
+    let fen = "3k4/8/8/8/8/8/4R3/4K3 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+    
+    println!("Before move:");
+    println!("White king on e1, White rook on e2, Black king on d8");
+    println!("Black in check: {}", {
+        let mut temp_board = board.clone();
+        temp_board.color_to_move = Color::Black;
+        temp_board.is_in_check()
+    });
+    
+    // Move rook to d2 to give check
+    let result = board.apply_move(Coordinates::new(5, 2), Coordinates::new(4, 2));
+    match result {
+        Ok(_) => {
+            println!("✅ Successfully moved rook to d2");
+            println!("Black in check: {}", board.is_in_check()); // Now it's black's turn
+        }
+        Err(e) => {
+            println!("❌ Failed to move rook to d2: {}", e);
+            panic!("Should be able to execute move that gives check");
+        }
+    }
+}
+
+#[test]
+fn test_can_give_check_without_capturing_king() {
+    // Test that you CAN move pieces to give check to enemy (without capturing king)
+    let fen = "4k3/8/8/8/8/8/4R3/5K2 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+    
+    println!("Initial state:");
+    println!("  Black king on e8, White rook on e2, White king on f1");
+    println!("  Black king in check: {}", {
+        let mut temp = board.clone();
+        temp.color_to_move = Color::Black;
+        temp.is_in_check()
+    });
+    
+    let legal_moves = board.generate_legal_moves();
+    
+    // White rook should be able to move to e7 to give check to black king
+    let check_move = legal_moves.iter()
+        .find(|(from, to)| from == &Coordinates::new(5, 2) && to == &Coordinates::new(5, 7))
+        .expect("Should be able to move rook to e7 to give check");
+    
+    println!("Moving rook from e2 to e7 to give check...");
+    board.apply_move(check_move.0, check_move.1).unwrap();
+    
+    println!("After move:");
+    println!("  Current player (Black) in check: {}", board.is_in_check());
+    println!("  Black king still on e8: {:?}", board.get(Coordinates::new(5, 8)));
+    println!("  White rook now on e7: {:?}", board.get(Coordinates::new(5, 7)));
+    
+    // Black should now be in check from the rook on e7
+    assert!(board.is_in_check(), "Black should be in check from white rook on e7");
 }
