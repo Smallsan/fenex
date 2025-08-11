@@ -180,4 +180,4 @@ impl ChessPieceEnum {
             }
         }
     }
-}
+
