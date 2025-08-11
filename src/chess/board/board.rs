@@ -6,7 +6,7 @@ impl Board {
         if !legal_moves.contains(&(from, to)) {
             return Err("Illegal move");
         }
-        
+
         // Handle castling
         if let Some(piece) = self.get(from) {
             if piece.piece_type == PieceType::King {
@@ -14,12 +14,26 @@ impl Board {
                 // Kingside castling
                 if from.x == 5 && to.x == 7 {
                     self.set(Coordinates { x: 8, y: rank }, None);
-                    self.set(Coordinates { x: 6, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
+                    self.set(
+                        Coordinates { x: 6, y: rank },
+                        Some(Piece {
+                            piece_type: PieceType::Rook,
+                            color: piece.color,
+                            has_moved: true,
+                        }),
+                    );
                 }
                 // Queenside castling
                 if from.x == 5 && to.x == 3 {
                     self.set(Coordinates { x: 1, y: rank }, None);
-                    self.set(Coordinates { x: 4, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
+                    self.set(
+                        Coordinates { x: 4, y: rank },
+                        Some(Piece {
+                            piece_type: PieceType::Rook,
+                            color: piece.color,
+                            has_moved: true,
+                        }),
+                    );
                 }
                 // Update castling rights
                 match piece.color {
@@ -49,9 +63,17 @@ impl Board {
         if let Some(p) = piece {
             if p.piece_type == PieceType::Pawn {
                 if let Some(ep) = self.en_passant {
-                    if to == ep && (from.x - to.x).abs() == 1 && (from.y - to.y).abs() == 1 && self.get(to).is_none() {
+                    if to == ep
+                        && (from.x - to.x).abs() == 1
+                        && (from.y - to.y).abs() == 1
+                        && self.get(to).is_none()
+                    {
                         // Remove captured pawn
-                        let cap_y = if p.color == Color::White { to.y - 1 } else { to.y + 1 };
+                        let cap_y = if p.color == Color::White {
+                            to.y - 1
+                        } else {
+                            to.y + 1
+                        };
                         self.set(Coordinates { x: to.x, y: cap_y }, None);
                     }
                 }
@@ -60,7 +82,7 @@ impl Board {
         // Execute the move
         self.set(from, None);
         self.set(to, piece);
-        
+
         // Handle pawn promotion
         if let Some(mut p) = piece {
             if p.piece_type == PieceType::Pawn {
@@ -71,7 +93,7 @@ impl Board {
                 }
             }
         }
-        
+
         // Update en passant square
         if let Some(p) = piece {
             if p.piece_type == PieceType::Pawn && (from.y - to.y).abs() == 2 {
@@ -120,55 +142,78 @@ impl Board {
                                     continue; // Skip moves that capture the king
                                 }
                             }
-                            
+
                             let mut clone = self.clone();
-                            
+
                             // Properly simulate the move including special rules
                             let moving_piece = clone.get(from);
                             if let Some(mut piece) = moving_piece {
                                 // Mark piece as moved
                                 piece.has_moved = true;
-                                
+
                                 // Handle en passant capture
                                 if piece.piece_type == PieceType::Pawn {
                                     if let Some(ep) = clone.en_passant {
-                                        if to == ep && (from.x - to.x).abs() == 1 && (from.y - to.y).abs() == 1 && clone.get(to).is_none() {
+                                        if to == ep
+                                            && (from.x - to.x).abs() == 1
+                                            && (from.y - to.y).abs() == 1
+                                            && clone.get(to).is_none()
+                                        {
                                             // Remove captured pawn
-                                            let cap_y = if piece.color == Color::White { to.y - 1 } else { to.y + 1 };
+                                            let cap_y = if piece.color == Color::White {
+                                                to.y - 1
+                                            } else {
+                                                to.y + 1
+                                            };
                                             clone.set(Coordinates { x: to.x, y: cap_y }, None);
                                         }
                                     }
                                 }
-                                
+
                                 // Handle castling rook movement
                                 if piece.piece_type == PieceType::King {
                                     let rank = from.y;
                                     // Kingside castling
                                     if from.x == 5 && to.x == 7 {
                                         clone.set(Coordinates { x: 8, y: rank }, None);
-                                        clone.set(Coordinates { x: 6, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
+                                        clone.set(
+                                            Coordinates { x: 6, y: rank },
+                                            Some(Piece {
+                                                piece_type: PieceType::Rook,
+                                                color: piece.color,
+                                                has_moved: true,
+                                            }),
+                                        );
                                     }
                                     // Queenside castling
                                     if from.x == 5 && to.x == 3 {
                                         clone.set(Coordinates { x: 1, y: rank }, None);
-                                        clone.set(Coordinates { x: 4, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
+                                        clone.set(
+                                            Coordinates { x: 4, y: rank },
+                                            Some(Piece {
+                                                piece_type: PieceType::Rook,
+                                                color: piece.color,
+                                                has_moved: true,
+                                            }),
+                                        );
                                     }
                                 }
-                                
+
                                 // Execute the move
                                 clone.set(from, None);
                                 clone.set(to, Some(piece));
-                                
+
                                 // Handle pawn promotion
                                 if piece.piece_type == PieceType::Pawn {
-                                    let promotion_rank = if piece.color == Color::White { 8 } else { 1 };
+                                    let promotion_rank =
+                                        if piece.color == Color::White { 8 } else { 1 };
                                     if to.y == promotion_rank {
                                         let mut promoted_piece = piece;
                                         promoted_piece.piece_type = PieceType::Queen;
                                         clone.set(to, Some(promoted_piece));
                                     }
                                 }
-                                
+
                                 // Check if our own king is still safe (DON'T switch color_to_move)
                                 if !clone.is_in_check() {
                                     legal_moves.push((from, to));
@@ -184,7 +229,7 @@ impl Board {
 
     /// Check if the current player is in check.
     pub fn is_in_check(&self) -> bool {
-    let king_pos = match self.find_king(self.color_to_move) {
+        let king_pos = match self.find_king(self.color_to_move) {
             Some(pos) => pos,
             None => return false,
         };
@@ -196,7 +241,10 @@ impl Board {
             for col in 0..8 {
                 if let Some(piece) = self.squares[row][col] {
                     if piece.color == opponent {
-                        let from = Coordinates { x: (col + 1) as i8, y: (row + 1) as i8 };
+                        let from = Coordinates {
+                            x: (col + 1) as i8,
+                            y: (row + 1) as i8,
+                        };
                         let moves = self.generate_piece_moves(from, piece);
                         if moves.contains(&king_pos) {
                             return true;
@@ -227,13 +275,19 @@ impl Board {
                 let next_y = from.y + dir;
                 if next_y >= 1 && next_y <= 8 {
                     // Forward
-                    let forward = Coordinates { x: from.x, y: next_y };
+                    let forward = Coordinates {
+                        x: from.x,
+                        y: next_y,
+                    };
                     if self.get(forward).is_none() {
                         moves.push(forward);
                         // Double move
                         let start_row = if piece.color == Color::White { 2 } else { 7 };
                         if from.y == start_row {
-                            let double_forward = Coordinates { x: from.x, y: from.y + 2 * dir };
+                            let double_forward = Coordinates {
+                                x: from.x,
+                                y: from.y + 2 * dir,
+                            };
                             if self.get(double_forward).is_none() {
                                 moves.push(double_forward);
                             }
@@ -259,8 +313,14 @@ impl Board {
             }
             PieceType::Knight => {
                 let knight_moves = [
-                    (2, 1), (1, 2), (-1, 2), (-2, 1),
-                    (-2, -1), (-1, -2), (1, -2), (2, -1),
+                    (2, 1),
+                    (1, 2),
+                    (-1, 2),
+                    (-2, 1),
+                    (-2, -1),
+                    (-1, -2),
+                    (1, -2),
+                    (2, -1),
                 ];
                 for (dx, dy) in knight_moves.iter() {
                     let nx = from.x + dx;
@@ -319,8 +379,14 @@ impl Board {
             }
             PieceType::Queen => {
                 let directions = [
-                    (1, 1), (1, -1), (-1, 1), (-1, -1),
-                    (1, 0), (-1, 0), (0, 1), (0, -1),
+                    (1, 1),
+                    (1, -1),
+                    (-1, 1),
+                    (-1, -1),
+                    (1, 0),
+                    (-1, 0),
+                    (0, 1),
+                    (0, -1),
                 ];
                 for (dx, dy) in directions.iter() {
                     let mut nx = from.x + dx;
@@ -342,8 +408,14 @@ impl Board {
             }
             PieceType::King => {
                 let king_moves = [
-                    (1, 0), (1, 1), (0, 1), (-1, 1),
-                    (-1, 0), (-1, -1), (0, -1), (1, -1),
+                    (1, 0),
+                    (1, 1),
+                    (0, 1),
+                    (-1, 1),
+                    (-1, 0),
+                    (-1, -1),
+                    (0, -1),
+                    (1, -1),
                 ];
                 for (dx, dy) in king_moves.iter() {
                     let nx = from.x + dx;
@@ -378,7 +450,8 @@ impl Board {
                                 if attacker.color == clone.color_to_move {
                                     if attacker.piece_type == PieceType::King {
                                         // King attacks adjacent squares only
-                                        if (from.x - sq.x).abs() <= 1 && (from.y - sq.y).abs() <= 1 {
+                                        if (from.x - sq.x).abs() <= 1 && (from.y - sq.y).abs() <= 1
+                                        {
                                             return true;
                                         }
                                     } else {
@@ -397,7 +470,9 @@ impl Board {
                 if kingside
                     && self.get(Coordinates { x: 6, y: rank }).is_none()
                     && self.get(Coordinates { x: 7, y: rank }).is_none()
-                    && self.get(Coordinates { x: 8, y: rank }).map_or(false, |r| r.piece_type == PieceType::Rook && r.color == piece.color)
+                    && self.get(Coordinates { x: 8, y: rank }).map_or(false, |r| {
+                        r.piece_type == PieceType::Rook && r.color == piece.color
+                    })
                     && !is_attacked(Coordinates { x: 5, y: rank })
                     && !is_attacked(Coordinates { x: 6, y: rank })
                     && !is_attacked(Coordinates { x: 7, y: rank })
@@ -409,7 +484,9 @@ impl Board {
                     && self.get(Coordinates { x: 4, y: rank }).is_none()
                     && self.get(Coordinates { x: 3, y: rank }).is_none()
                     && self.get(Coordinates { x: 2, y: rank }).is_none()
-                    && self.get(Coordinates { x: 1, y: rank }).map_or(false, |r| r.piece_type == PieceType::Rook && r.color == piece.color)
+                    && self.get(Coordinates { x: 1, y: rank }).map_or(false, |r| {
+                        r.piece_type == PieceType::Rook && r.color == piece.color
+                    })
                     && !is_attacked(Coordinates { x: 5, y: rank })
                     && !is_attacked(Coordinates { x: 4, y: rank })
                     && !is_attacked(Coordinates { x: 3, y: rank })
@@ -521,7 +598,7 @@ impl Board {
                 _ => return Err("Invalid FEN: invalid character in piece placement"),
             }
         }
-    // The rest of the FEN parsing logic (active color, castling rights, en passant, etc.) follows here, outside the piece placement loop.
+        // The rest of the FEN parsing logic (active color, castling rights, en passant, etc.) follows here, outside the piece placement loop.
         // Active color
         board.color_to_move = match parts[1] {
             "w" => Color::White,
