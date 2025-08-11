@@ -2,14 +2,6 @@
 
 A fast and reliable chess engine in Rust with full rule implementation and FEN support.
 
-## Features
-
-- ✅ Complete chess rules: castling, en passant, pawn promotion
-- ✅ Legal move generation with check validation  
-- ✅ FEN parsing and serialization
-- ✅ Coordinate system with algebraic notation support
-- ✅ Comprehensive test suite
-
 ## Quick Start
 
 Add to your `Cargo.toml`:
@@ -101,7 +93,6 @@ Run the test suite:
 cargo test
 ```
 
-All chess rules are thoroughly tested including edge cases for special moves.
 
 ## Contributing
 
