@@ -1,37 +1,36 @@
 use super::notation::Notation;
 
-/// Represents the coordinates on a chess board.
+/// Chess board coordinates (1-indexed: a1 = 1,1)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Coordinates {
-    /// The x-coordinate (file).
+    /// File (a-h = 1-8)
     pub x: i8,
-    /// The y-coordinate (rank).
+    /// Rank (1-8)
     pub y: i8,
 }
 
 impl Coordinates {
-    /// Creates a new `Coordinates` instance.
+    /// Creates new coordinates
     pub fn new(x: i8, y: i8) -> Coordinates {
         Coordinates { x, y }
     }
 
-    // Returns the coordinates as a tuple.
+    /// Converts to tuple for array indexing
     pub fn to_tuple(&self) -> (usize, usize) {
         ((self.x) as usize, (self.y) as usize)
     }
 
-    
+    /// Gets file as character (a-h)
     pub fn to_file(&self) -> char {
         (self.x as u8 + b'a' - 1) as char
     }
 
+    /// Gets rank as character (1-8)
     pub fn to_rank(&self) -> char {
         (self.y as u8 + b'1' - 1) as char
     }
 
-    /// Creates a `Coordinates` instance from a string representation.
-    /// The string should be in the format "x,y".
-    /// Returns `None` if the string is not a valid representation.
+    /// Parses coordinates from "x,y" string
     pub fn from_string(input: &str) -> Result<Coordinates, &'static str> {
         let parts: Vec<&str> = input.split(',').collect();
         if parts.len() != 2 {

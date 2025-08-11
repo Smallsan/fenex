@@ -2,18 +2,18 @@ use std::convert::TryInto;
 
 use super::coordinates::Coordinates;
 
-/// Represents the notation of a position on a chess board.
+/// Algebraic chess notation (e.g., "e4", "a1")
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 
 pub struct Notation {
-    /// The file (column) of the position.
+    /// File (a-h)
     pub file: char,
-    /// The rank (row) of the position.
+    /// Rank (1-8)
     pub rank: char,
 }
 
 impl Notation {
-    /// Creates a new `Notation` instance.
+    /// Creates notation from file and rank
     pub fn new(file: char, rank: char) -> Result<Notation, &'static str> {
         if !file.is_ascii_lowercase() {
             return Err("File should be a lowercase ASCII letter");
@@ -24,13 +24,13 @@ impl Notation {
         Ok(Notation { file, rank })
     }
 
-    /// Creates a `Notation` instance from a string representation of coordinates.
+    /// Converts coordinate string to notation
     pub fn from_coordinates_string(input: &str) -> Result<Notation, &'static str> {
         let coordinates = Coordinates::from_string(input)?;
         Notation::from_coordinates(coordinates)
     }
 
-    /// Creates a `Notation` instance from a `Coordinates` instance.
+    /// Converts coordinates to algebraic notation
     pub fn from_coordinates(coordinates: Coordinates) -> Result<Notation, &'static str> {
         let file = match coordinates.x {
             1 => 'a',

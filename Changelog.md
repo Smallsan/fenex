@@ -46,4 +46,27 @@
 - is valid move now checks for pins and checks.
 - Created a fen to board.
 - Made the starting position builders more efficient.
+
+## Fenex v0.1.6 (8/11/2025)
+
+### Major Updates
+- **Complete chess rule implementation**: All special moves now working
+  - Castling (kingside and queenside) with proper rook movement
+  - En passant capture with pawn removal
+  - Pawn promotion (defaults to Queen)
+- **Legal move validation**: Moves are validated before execution
+- **Comprehensive test suite**: 10 test cases covering all chess rules
+- **Code cleanup**: Improved comments and documentation
+- **Bug fixes**: Fixed coordinate system issues and move generation
+
+### Breaking Changes
+- Method renamed: `make_move()` → `apply_move()`
+- Coordinate construction: `Coordinates { x, y }` → `Coordinates::new(x, y)`
+- Method renamed: `get_piece()` → `get()`
+
+### Technical Improvements  
+- All tests now passing (11/11)
+- Cleaner, more focused code comments
+- Updated README with modern examples
+- Better error handling for illegal moves
   

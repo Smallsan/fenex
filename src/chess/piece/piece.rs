@@ -1,5 +1,6 @@
 use crate::chess::board::{board::Board, coordinates::Coordinates};
 
+/// Chess piece types
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PieceType {
     Pawn,
@@ -10,6 +11,7 @@ pub enum PieceType {
     King,
 }
 
+/// Player colors
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Color {
     White,
@@ -17,6 +19,7 @@ pub enum Color {
 }
 
 impl Color {
+    /// Switches to opposite color
     pub fn reverse(&self) -> Color {
         match self {
             Color::White => Color::Black,
@@ -25,6 +28,7 @@ impl Color {
     }
 }
 
+/// Castling availability for both players
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct CastlingRights {
     pub white_kingside: bool,
@@ -44,6 +48,7 @@ impl Default for CastlingRights {
     }
 }
 
+/// Core chess piece behavior
 pub trait ChessPiece {
     fn piece_type(&self) -> PieceType;
     fn color(&self) -> Color;

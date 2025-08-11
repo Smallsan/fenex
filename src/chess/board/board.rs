@@ -1,29 +1,27 @@
 impl Board {
-    /// Move a piece from one square to another and switch the turn (for simulation only).
+    /// Executes a move with full rule validation
     pub fn apply_move(&mut self, from: Coordinates, to: Coordinates) -> Result<(), &'static str> {
-        // Check if the move is legal FIRST
+        // Validate move legality first
         let legal_moves = self.generate_legal_moves();
         if !legal_moves.contains(&(from, to)) {
             return Err("Illegal move");
         }
         
-        // Castling: move rook if king castles
+        // Handle castling
         if let Some(piece) = self.get(from) {
             if piece.piece_type == PieceType::King {
                 let rank = from.y;
-                // Kingside
+                // Kingside castling
                 if from.x == 5 && to.x == 7 {
-                    // Move rook from h-file to f-file
                     self.set(Coordinates { x: 8, y: rank }, None);
                     self.set(Coordinates { x: 6, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
                 }
-                // Queenside
+                // Queenside castling
                 if from.x == 5 && to.x == 3 {
-                    // Move rook from a-file to d-file
                     self.set(Coordinates { x: 1, y: rank }, None);
                     self.set(Coordinates { x: 4, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
                 }
-                // Remove castling rights for this color
+                // Update castling rights
                 match piece.color {
                     Color::White => {
                         self.castling_rights[0] = false;
@@ -35,7 +33,7 @@ impl Board {
                     }
                 }
             }
-            // Remove castling rights if rook moves
+            // Update castling rights when rook moves
             if piece.piece_type == PieceType::Rook {
                 match (piece.color, from.x, from.y) {
                     (Color::White, 1, 1) => self.castling_rights[1] = false, // White queenside
@@ -47,19 +45,19 @@ impl Board {
             }
         }
         let piece = self.get(from);
-        // En passant capture
+        // Handle en passant capture
         if let Some(p) = piece {
             if p.piece_type == PieceType::Pawn {
                 if let Some(ep) = self.en_passant {
                     if to == ep && (from.x - to.x).abs() == 1 && (from.y - to.y).abs() == 1 && self.get(to).is_none() {
-                        // Remove the captured pawn
+                        // Remove captured pawn
                         let cap_y = if p.color == Color::White { to.y - 1 } else { to.y + 1 };
                         self.set(Coordinates { x: to.x, y: cap_y }, None);
                     }
                 }
             }
         }
-        // Move the piece
+        // Execute the move
         self.set(from, None);
         self.set(to, piece);
         
@@ -68,14 +66,13 @@ impl Board {
             if p.piece_type == PieceType::Pawn {
                 let promotion_rank = if p.color == Color::White { 8 } else { 1 };
                 if to.y == promotion_rank {
-                    // Promote to Queen by default
                     p.piece_type = PieceType::Queen;
                     self.set(to, Some(p));
                 }
             }
         }
         
-        // Set en passant square if double pawn push
+        // Update en passant square
         if let Some(p) = piece {
             if p.piece_type == PieceType::Pawn && (from.y - to.y).abs() == 2 {
                 let ep_y = (from.y + to.y) / 2;
@@ -93,7 +90,7 @@ impl Board {
         Ok(())
     }
 
-    /// Find the coordinates of the king of the given color.
+    /// Locates the king for the given color
     pub fn find_king(&self, color: Color) -> Option<Coordinates> {
         for y in 1..=8 {
             for x in 1..=8 {
