@@ -70,6 +70,10 @@
 - Updated README with modern examples
 - Better error handling for illegal moves
   
-  ## Fenex v0.1.8 (8/11/2025)
+## Fenex v0.1.7 (8/11/2025)
 
 - Fixed issue with checks.
+
+## Fenex v0.1.8 (8/11/2025)
+
+- Fixed so much bugs and forgotten implementations

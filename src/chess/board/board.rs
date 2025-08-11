@@ -115,13 +115,57 @@ impl Board {
                         let pseudo_moves = self.generate_piece_moves(from, piece);
                         for to in pseudo_moves {
                             let mut clone = self.clone();
-                            // Directly apply the move without legality check to avoid recursion
+                            
+                            // Properly simulate the move including special rules
                             let moving_piece = clone.get(from);
-                            clone.set(from, None);
-                            clone.set(to, moving_piece);
-                            // DON'T switch color_to_move - we want to check if OUR king is still safe
-                            if !clone.is_in_check() {
-                                legal_moves.push((from, to));
+                            if let Some(mut piece) = moving_piece {
+                                // Mark piece as moved
+                                piece.has_moved = true;
+                                
+                                // Handle en passant capture
+                                if piece.piece_type == PieceType::Pawn {
+                                    if let Some(ep) = clone.en_passant {
+                                        if to == ep && (from.x - to.x).abs() == 1 && (from.y - to.y).abs() == 1 && clone.get(to).is_none() {
+                                            // Remove captured pawn
+                                            let cap_y = if piece.color == Color::White { to.y - 1 } else { to.y + 1 };
+                                            clone.set(Coordinates { x: to.x, y: cap_y }, None);
+                                        }
+                                    }
+                                }
+                                
+                                // Handle castling rook movement
+                                if piece.piece_type == PieceType::King {
+                                    let rank = from.y;
+                                    // Kingside castling
+                                    if from.x == 5 && to.x == 7 {
+                                        clone.set(Coordinates { x: 8, y: rank }, None);
+                                        clone.set(Coordinates { x: 6, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
+                                    }
+                                    // Queenside castling
+                                    if from.x == 5 && to.x == 3 {
+                                        clone.set(Coordinates { x: 1, y: rank }, None);
+                                        clone.set(Coordinates { x: 4, y: rank }, Some(Piece { piece_type: PieceType::Rook, color: piece.color, has_moved: true }));
+                                    }
+                                }
+                                
+                                // Execute the move
+                                clone.set(from, None);
+                                clone.set(to, Some(piece));
+                                
+                                // Handle pawn promotion
+                                if piece.piece_type == PieceType::Pawn {
+                                    let promotion_rank = if piece.color == Color::White { 8 } else { 1 };
+                                    if to.y == promotion_rank {
+                                        let mut promoted_piece = piece;
+                                        promoted_piece.piece_type = PieceType::Queen;
+                                        clone.set(to, Some(promoted_piece));
+                                    }
+                                }
+                                
+                                // DON'T switch color_to_move - we want to check if OUR king is still safe
+                                if !clone.is_in_check() {
+                                    legal_moves.push((from, to));
+                                }
                             }
                         }
                     }
@@ -141,11 +185,11 @@ impl Board {
             Color::White => Color::Black,
             Color::Black => Color::White,
         };
-        for y in 0..8 {
-            for x in 0..8 {
-                if let Some(piece) = self.squares[y][x] {
+        for row in 0..8 {
+            for col in 0..8 {
+                if let Some(piece) = self.squares[row][col] {
                     if piece.color == opponent {
-                        let from = Coordinates { x: (x + 1) as i8, y: (y + 1) as i8 };
+                        let from = Coordinates { x: (col + 1) as i8, y: (row + 1) as i8 };
                         let moves = self.generate_piece_moves(from, piece);
                         if moves.contains(&king_pos) {
                             return true;
