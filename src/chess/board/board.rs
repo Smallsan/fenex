@@ -1,10 +1,38 @@
 impl Board {
     /// Executes a move with full rule validation
     pub fn apply_move(&mut self, from: Coordinates, to: Coordinates) -> Result<(), &'static str> {
+        self.apply_move_with_promotion(from, to, None)
+    }
+
+    /// Executes a move with optional pawn promotion piece specification
+    pub fn apply_move_with_promotion(
+        &mut self,
+        from: Coordinates,
+        to: Coordinates,
+        promotion: Option<PieceType>,
+    ) -> Result<(), &'static str> {
         // Validate move legality first
         let legal_moves = self.generate_legal_moves();
         if !legal_moves.contains(&(from, to)) {
             return Err("Illegal move");
+        }
+
+        // If this is a promotion move, validate the promotion piece
+        if let Some(piece) = self.get(from) {
+            if piece.piece_type == PieceType::Pawn {
+                let promotion_rank = if piece.color == Color::White { 8 } else { 1 };
+                if to.y == promotion_rank {
+                    if let Some(promo_piece) = promotion {
+                        match promo_piece {
+                            PieceType::Queen
+                            | PieceType::Rook
+                            | PieceType::Bishop
+                            | PieceType::Knight => {}
+                            _ => return Err("Invalid promotion piece"),
+                        }
+                    }
+                }
+            }
         }
 
         // Handle castling
@@ -88,7 +116,16 @@ impl Board {
             if p.piece_type == PieceType::Pawn {
                 let promotion_rank = if p.color == Color::White { 8 } else { 1 };
                 if to.y == promotion_rank {
-                    p.piece_type = PieceType::Queen;
+                    // Use specified promotion piece or default to Queen
+                    p.piece_type = promotion.unwrap_or(PieceType::Queen);
+                    // Validate promotion piece (can only promote to Queen, Rook, Bishop, or Knight)
+                    match p.piece_type {
+                        PieceType::Queen
+                        | PieceType::Rook
+                        | PieceType::Bishop
+                        | PieceType::Knight => {}
+                        _ => return Err("Invalid promotion piece"),
+                    }
                     self.set(to, Some(p));
                 }
             }
@@ -110,6 +147,42 @@ impl Board {
             Color::Black => Color::White,
         };
         Ok(())
+    }
+
+    /// Convenience method to promote a pawn to Queen
+    pub fn promote_to_queen(
+        &mut self,
+        from: Coordinates,
+        to: Coordinates,
+    ) -> Result<(), &'static str> {
+        self.apply_move_with_promotion(from, to, Some(PieceType::Queen))
+    }
+
+    /// Convenience method to promote a pawn to Rook
+    pub fn promote_to_rook(
+        &mut self,
+        from: Coordinates,
+        to: Coordinates,
+    ) -> Result<(), &'static str> {
+        self.apply_move_with_promotion(from, to, Some(PieceType::Rook))
+    }
+
+    /// Convenience method to promote a pawn to Bishop
+    pub fn promote_to_bishop(
+        &mut self,
+        from: Coordinates,
+        to: Coordinates,
+    ) -> Result<(), &'static str> {
+        self.apply_move_with_promotion(from, to, Some(PieceType::Bishop))
+    }
+
+    /// Convenience method to promote a pawn to Knight
+    pub fn promote_to_knight(
+        &mut self,
+        from: Coordinates,
+        to: Coordinates,
+    ) -> Result<(), &'static str> {
+        self.apply_move_with_promotion(from, to, Some(PieceType::Knight))
     }
 
     /// Locates the king for the given color

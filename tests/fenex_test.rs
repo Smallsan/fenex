@@ -118,6 +118,88 @@ fn test_pawn_promotion() {
 }
 
 #[test]
+fn test_pawn_promotion_to_different_pieces() {
+    // Test promotion to Queen
+    let fen = "8/P7/8/8/8/8/8/8 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+    board
+        .promote_to_queen(Coordinates::new(1, 7), Coordinates::new(1, 8))
+        .unwrap();
+    assert_eq!(
+        board.get(Coordinates::new(1, 8)).unwrap().piece_type,
+        PieceType::Queen
+    );
+
+    // Test promotion to Rook
+    let fen = "8/1P6/8/8/8/8/8/8 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+    board
+        .promote_to_rook(Coordinates::new(2, 7), Coordinates::new(2, 8))
+        .unwrap();
+    assert_eq!(
+        board.get(Coordinates::new(2, 8)).unwrap().piece_type,
+        PieceType::Rook
+    );
+
+    // Test promotion to Bishop
+    let fen = "8/2P5/8/8/8/8/8/8 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+    board
+        .promote_to_bishop(Coordinates::new(3, 7), Coordinates::new(3, 8))
+        .unwrap();
+    assert_eq!(
+        board.get(Coordinates::new(3, 8)).unwrap().piece_type,
+        PieceType::Bishop
+    );
+
+    // Test promotion to Knight
+    let fen = "8/3P4/8/8/8/8/8/8 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+    board
+        .promote_to_knight(Coordinates::new(4, 7), Coordinates::new(4, 8))
+        .unwrap();
+    assert_eq!(
+        board.get(Coordinates::new(4, 8)).unwrap().piece_type,
+        PieceType::Knight
+    );
+}
+
+#[test]
+fn test_pawn_promotion_with_apply_move_with_promotion() {
+    // Test using apply_move_with_promotion directly
+    let fen = "8/P7/8/8/8/8/8/8 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+
+    // Promote to Rook using apply_move_with_promotion
+    board
+        .apply_move_with_promotion(
+            Coordinates::new(1, 7),
+            Coordinates::new(1, 8),
+            Some(PieceType::Rook),
+        )
+        .unwrap();
+    assert_eq!(
+        board.get(Coordinates::new(1, 8)).unwrap().piece_type,
+        PieceType::Rook
+    );
+}
+
+#[test]
+fn test_invalid_promotion_piece() {
+    let fen = "8/P7/8/8/8/8/8/8 w - - 0 1";
+    let mut board = Board::from_fen(fen).unwrap();
+
+    // Try to promote to King (should fail)
+    let result = board.apply_move_with_promotion(
+        Coordinates::new(1, 7),
+        Coordinates::new(1, 8),
+        Some(PieceType::King),
+    );
+    assert!(result.is_err());
+    assert_eq!(result.unwrap_err(), "Invalid promotion piece");
+}
+
+#[test]
 fn test_check_detection() {
     // White king in check from black rook - White to move
     let fen = "4k3/8/8/8/8/8/8/4K2r w - - 0 1";

@@ -1,6 +1,6 @@
 [package]
 name = "fenex"
-version = "0.1.9"
+version = "0.1.10"
 edition = "2021"
 authors = ["Small San", "DefinitelyNotSmallSan@gmail.com"]
 readme = "README.md"
@@ -18,6 +18,9 @@ crate-type = ["lib"]
 name = "fenex_test"
 path = "tests/fenex_test.rs"
 
+[[example]]
+name = "promotion_demo"
+path = "examples/promotion_demo.rs"
 
 [dependencies]
 

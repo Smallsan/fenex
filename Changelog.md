@@ -1,5 +1,28 @@
 # Fenex Changelog
 
+## Fenex v0.1.11 (8/12/2025)
+
+### Major Updates
+
+- **Fixed Autopromoting Issue**: Pawns no longer automatically promote to Queen only
+  - Added `apply_move_with_promotion()` method to specify promotion piece
+  - Added convenience methods: `promote_to_queen()`, `promote_to_rook()`, `promote_to_bishop()`, `promote_to_knight()`
+  - Validation ensures only valid promotion pieces (Queen, Rook, Bishop, Knight) are allowed
+  - `apply_move()` still defaults to Queen for backward compatibility
+- **Comprehensive Tests**: Added tests for all promotion scenarios including invalid piece validation
+
+### Breaking Changes
+
+- None - all changes are backward compatible
+
+### API Additions
+
+- `apply_move_with_promotion(from, to, promotion)` - Apply move with specific promotion piece
+- `promote_to_queen(from, to)` - Convenience method for Queen promotion
+- `promote_to_rook(from, to)` - Convenience method for Rook promotion
+- `promote_to_bishop(from, to)` - Convenience method for Bishop promotion
+- `promote_to_knight(from, to)` - Convenience method for Knight promotion
+
 ## Fenex v0.1.0 (1/14/2024)
 
 - Uploaded the project.
@@ -50,6 +73,7 @@
 ## Fenex v0.1.6 (8/11/2025)
 
 ### Major Updates
+
 - **Complete chess rule implementation**: All special moves now working
   - Castling (kingside and queenside) with proper rook movement
   - En passant capture with pawn removal
@@ -60,16 +84,18 @@
 - **Bug fixes**: Fixed coordinate system issues and move generation
 
 ### Breaking Changes
+
 - Method renamed: `make_move()` → `apply_move()`
 - Coordinate construction: `Coordinates { x, y }` → `Coordinates::new(x, y)`
 - Method renamed: `get_piece()` → `get()`
 
-### Technical Improvements  
+### Technical Improvements
+
 - All tests now passing (11/11)
 - Cleaner, more focused code comments
 - Updated README with modern examples
 - Better error handling for illegal moves
-  
+
 ## Fenex v0.1.7 (8/11/2025)
 
 - Fixed issue with checks.
@@ -81,3 +107,7 @@
 ## Fenex v0.1.9 (8/12/2025)
 
 - Huge bug regarding legal move generation preventing giving checks.
+
+## Fenex v0.1.10 (8/12/2025)
+
+- Can now promote to any piece type except King.

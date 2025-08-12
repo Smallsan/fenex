@@ -5,9 +5,10 @@ A fast and reliable chess engine in Rust with full rule implementation and FEN s
 ## Quick Start
 
 Add to your `Cargo.toml`:
+
 ```toml
 [dependencies]
-fenex = "0.1.7"
+fenex = "0.1.10"
 ```
 
 ## Basic Usage
@@ -19,7 +20,7 @@ use fenex::chess::board::coordinates::Coordinates;
 // Load position from FEN
 let mut board = Board::from_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1").unwrap();
 
-// Make a move (e2 to e4)  
+// Make a move (e2 to e4)
 board.apply_move(Coordinates::new(5, 2), Coordinates::new(5, 4)).unwrap();
 
 // Generate all legal moves
@@ -33,22 +34,26 @@ println!("Position: {}", board.to_fen());
 ## Architecture
 
 ### Coordinates
+
 - 1-indexed system (a1 = Coordinates::new(1,1))
 - Conversion to/from algebraic notation
 
-### Board  
+### Board
+
 - 8x8 array representation
 - FEN import/export
 - Legal move validation
 - Special moves (castling, en passant, promotion)
 
 ### Pieces
+
 - All standard chess pieces with proper movement rules
 - Color and piece type tracking
 
 ## Examples
 
 ### Basic Game Setup
+
 ```rust
 use fenex::chess::board::board::Board;
 use fenex::chess::board::coordinates::Coordinates;
@@ -60,7 +65,8 @@ let mut board = Board::new();
 let mut board = Board::from_fen("r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3").unwrap();
 ```
 
-### Making Moves  
+### Making Moves
+
 ```rust
 // Move piece from e2 to e4
 let from = Coordinates::new(5, 2);
@@ -75,29 +81,44 @@ if legal_moves.contains(&(from, to)) {
 ```
 
 ### Special Moves
+
 ```rust
 // Castling (automatically moves rook)
 board.apply_move(Coordinates::new(5, 1), Coordinates::new(7, 1)).unwrap();
 
-// En passant capture  
+// En passant capture
 board.apply_move(Coordinates::new(5, 5), Coordinates::new(4, 6)).unwrap();
 
-// Pawn promotion (defaults to Queen)
+// Pawn promotion - multiple options available
+// Default promotion (to Queen)
 board.apply_move(Coordinates::new(1, 7), Coordinates::new(1, 8)).unwrap();
+
+// Specific promotion options
+board.promote_to_queen(Coordinates::new(1, 7), Coordinates::new(1, 8)).unwrap();
+board.promote_to_rook(Coordinates::new(1, 7), Coordinates::new(1, 8)).unwrap();
+board.promote_to_bishop(Coordinates::new(1, 7), Coordinates::new(1, 8)).unwrap();
+board.promote_to_knight(Coordinates::new(1, 7), Coordinates::new(1, 8)).unwrap();
+
+// Or use apply_move_with_promotion for more control
+board.apply_move_with_promotion(
+    Coordinates::new(1, 7),
+    Coordinates::new(1, 8),
+    Some(PieceType::Rook)
+).unwrap();
 ```
 
 ## Testing
 
 Run the test suite:
+
 ```bash
 cargo test
 ```
-
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Add tests for new functionality  
+3. Add tests for new functionality
 4. Run `cargo fmt` and `cargo clippy`
 5. Submit a pull request
